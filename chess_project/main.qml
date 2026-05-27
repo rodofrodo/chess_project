@@ -12,6 +12,6 @@ Window {
         verticalAlignment: Text.AlignVCenter
         font.bold: true
         font.pointSize: 42
-        text: "Hello World!"
+        text: "design_bs_branch"
     }
 }
