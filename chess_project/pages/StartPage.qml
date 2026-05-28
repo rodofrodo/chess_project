@@ -1,20 +1,38 @@
 import QtQuick
 import QtQuick.Controls
+import "../elements" 
 
 Page {
     id: root
-    background: Rectangle { color: "black" } // Match your Figma background
+    
+    // Load your exact Figma artwork
+    Image {
+        anchors.fill: parent
+        source: "../assets/startpage_bg.png" 
+        fillMode: Image.PreserveAspectCrop
+    }
 
-    // ... All your text and glitch effects go here ...
-
-    Button {
-        text: "Get started"
+    // Native text (crisp, clean, and dynamic)
+    ChessStartText {
         anchors.centerIn: parent
-        
-        onClicked: {
-            // StackView is an "attached property". 
-            // Any component inside a StackView can access the stack to navigate!
-            //StackView.view.push("GamePage.qml")
-        }
+        anchors.verticalCenterOffset: -50 
+    }
+    
+    // Add the subtitle (matching your Figma design)
+    Text {
+        text: "Where every move is a question, and\nevery mistake becomes history."
+        color: "#a0a0a0" // A nice subtle grey
+        font.pixelSize: 16
+        horizontalAlignment: Text.AlignHCenter
+        anchors.top: parent.top
+        anchors.topMargin: parent.height / 2 + 50 // Positioned under the main title
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    // Interactive button
+    GetStartedBtn {
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: 100 
     }
 }

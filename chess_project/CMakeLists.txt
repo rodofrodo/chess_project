@@ -34,6 +34,13 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         QML_FILES
             main.qml
             pages/StartPage.qml
+            elements/ChessStartText.qml
+            elements/GetStartedBtn.qml
+            assets/startpage_bg.png
+            assets/product-sans-bold.ttf
+            assets/product-sans-italic-bold.ttf
+            assets/product-sans-italic.ttf
+            assets/product-sans-regular.ttf
     )
 endif()
 
