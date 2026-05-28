@@ -8,11 +8,16 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/chess_project/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+
+    // This exact string is required based on your CMake's RESOURCE_PREFIX and URI
+    const QUrl url(u"qrc:/qt/qml/chess_project/main.qml"_qs);
+
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+        &app, []() { QCoreApplication::exit(-1); },
+        Qt::QueuedConnection);
+
+    engine.load(url);
 
     return app.exec();
 }

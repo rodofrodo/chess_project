@@ -1,17 +1,18 @@
-import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Controls
 
 Window {
+    width: 1280
+    height: 720
     visible: true
-    width: 640
-    height: 480
-    title: "chess_project"
-    Text {
+    title: qsTr("Chess App")
+    color: "black" // Prevents white flashes during page transitions
+
+    StackView {
+        id: stackView
         anchors.fill: parent
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.bold: true
-        font.pointSize: 42
-        text: "design_bs_branch"
+        
+        // This is the first page the app loads
+        initialItem: "pages/StartPage.qml" 
     }
 }

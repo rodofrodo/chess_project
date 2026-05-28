@@ -11,6 +11,7 @@ find_package(Qt${QT_VERSION_MAJOR}
     COMPONENTS
         Quick
 )
+
 qt_standard_project_setup()
 
 set(PROJECT_SOURCES
@@ -32,6 +33,7 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         RESOURCE_PREFIX "/qt/qml/"
         QML_FILES
             main.qml
+            pages/StartPage.qml
     )
 endif()
 
@@ -44,7 +46,6 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         Qt::Quick
 )
-
 
 if(Qt6_FOUND)
     qt_import_qml_plugins(${PROJECT_NAME})
