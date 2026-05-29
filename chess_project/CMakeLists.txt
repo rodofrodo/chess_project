@@ -15,6 +15,11 @@ qt_standard_project_setup()
 
 set(PROJECT_SOURCES
     main.cpp
+    Pawn.cpp
+    Pawn.h
+    Piece.cpp
+    Piece.h
+    Types.h
 )
 
 if(QT_VERSION VERSION_LESS 5.15)
