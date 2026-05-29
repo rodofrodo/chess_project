@@ -48,10 +48,10 @@ Item {
             PauseAnimation { duration: 500 } // Wait 1 second
             
             PropertyAction { target: blueText; property: "opacity"; value: 1.0 }
-            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -14; duration: 40 }
-            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -6; duration: 30 }
-            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -12; duration: 50 }
-            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -8; duration: 30 }
+            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -10; duration: 40 }
+            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -3; duration: 30 }
+            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -8; duration: 50 }
+            NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -4; duration: 30 }
             PropertyAction { target: blueText; property: "opacity"; value: 0.0 }
             PropertyAction { target: blueText; property: "anchors.horizontalCenterOffset"; value: 0 }
             
@@ -76,7 +76,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 500 } // Offset by 20ms so it tears slightly after blue
+            PauseAnimation { duration: 520 } // Offset by 20ms so it tears slightly after blue
             
             PropertyAction { target: cyanText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: cyanText; property: "anchors.horizontalCenterOffset"; to: -6; duration: 30 }
@@ -111,7 +111,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 500 } // Wait 3 seconds
+            PauseAnimation { duration: 520 } // Wait 3 seconds
             
             PropertyAction { target: yellowText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: yellowText; property: "anchors.horizontalCenterOffset"; to: 6; duration: 40 }
@@ -145,10 +145,10 @@ Item {
             PauseAnimation { duration: 500 } // Offset by 20ms
             
             PropertyAction { target: redText; property: "opacity"; value: 1.0 }
-            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 14; duration: 30 }
-            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 6; duration: 50 }
-            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 12; duration: 30 }
-            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 8; duration: 40 }
+            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 10; duration: 30 }
+            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 3; duration: 50 }
+            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 8;  duration: 30 }
+            NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 4; duration: 40 }
             PropertyAction { target: redText; property: "opacity"; value: 0.0 }
             PropertyAction { target: redText; property: "anchors.horizontalCenterOffset"; value: 0 }
             

@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +10,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    app.setWindowIcon(QIcon(":/qt/qml/chess_project/assets/icon.png"));
 
     // This exact string is required based on your CMake's RESOURCE_PREFIX and URI
     const QUrl url(u"qrc:/qt/qml/chess_project/main.qml"_qs);

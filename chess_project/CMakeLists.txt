@@ -24,7 +24,9 @@ elseif(QT_VERSION VERSION_LESS 6.2)
     qt_add_resources(PROJECT_SOURCES qml.qrc)
 endif()
 
-qt_add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+qt_add_executable(chess_project ${PROJECT_SOURCES}
+    app_icon.rc
+)
 
 if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
     qt_add_qml_module(${PROJECT_NAME}
@@ -38,10 +40,12 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
             assets/startpage_bg.png
+            assets/mainmenu_bg.png
             assets/product-sans-bold.ttf
             assets/product-sans-italic-bold.ttf
             assets/product-sans-italic.ttf
             assets/product-sans-regular.ttf
+            assets/icon.png
     )
 endif()
 
