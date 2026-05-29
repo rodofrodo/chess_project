@@ -34,6 +34,7 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         QML_FILES
             main.qml
             pages/StartPage.qml
+            pages/MainMenu.qml
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
             assets/startpage_bg.png

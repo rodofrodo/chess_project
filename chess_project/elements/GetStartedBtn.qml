@@ -8,6 +8,11 @@ Item {
 
     signal getStartedClicked()
 
+    FontLoader {
+        id: productSansBold
+        source: "../assets/product-sans-bold.ttf"
+    }
+
     Rectangle {
         id: bgRect
         anchors.fill: parent
@@ -24,7 +29,9 @@ Item {
         Text {
             text: "Get started"
             color: "black"
-            font.pixelSize: 18
+            font.family: productSansBold.name
+
+            font.pixelSize: 24
             font.bold: true
             anchors.centerIn: parent
         }

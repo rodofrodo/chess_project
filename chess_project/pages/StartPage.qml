@@ -5,6 +5,11 @@ import "../elements"
 Page {
     id: root
     
+    FontLoader {
+        id: productSansRegular
+        source: "../assets/product-sans-regular.ttf"
+    }
+
     // Load your exact Figma artwork
     Image {
         anchors.fill: parent
@@ -14,25 +19,34 @@ Page {
 
     // Native text (crisp, clean, and dynamic)
     ChessStartText {
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: -50 
+        id: chessText
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 222
     }
     
     // Add the subtitle (matching your Figma design)
     Text {
+        id: chessSubtitle
         text: "Where every move is a question, and\nevery mistake becomes history."
         color: "#a0a0a0" // A nice subtle grey
-        font.pixelSize: 16
+        font.family: productSansRegular.name
+
+        font.pixelSize: 24
         horizontalAlignment: Text.AlignHCenter
-        anchors.top: parent.top
-        anchors.topMargin: parent.height / 2 + 50 // Positioned under the main title
+        anchors.top: chessText.bottom
+        anchors.topMargin: 45
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
     // Interactive button
     GetStartedBtn {
-        anchors.bottom: parent.bottom
+        anchors.top: chessSubtitle.bottom
+        anchors.topMargin: 210
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottomMargin: 100 
+
+        onGetStartedClicked: {
+            root.StackView.view.push("MainMenu.qml")
+        }
     }
 }

@@ -6,7 +6,7 @@ Window {
     width: 1280
     height: 720
     visible: true
-    title: qsTr("Chess App")
+    title: qsTr("Chess Game")
     color: "black" // Prevents white flashes during page transitions
     visibility: Window.FullScreen // Start in full-screen mode
 
