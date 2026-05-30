@@ -22,4 +22,38 @@ Page {
         anchors.topMargin: 210
         anchors.leftMargin: 210
     }
+
+    MenuButton {
+        text: "PLAY"
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 565
+        anchors.rightMargin: 83
+        onClicked: {
+            // Navigate to the Play page
+            //mainStackView.push(playPage)
+        }
+    }
+    
+    MenuButton {
+        text: "CREDITS"
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 711
+        anchors.rightMargin: 83
+        onClicked: {
+            mainmenu.StackView.view.push("CreditsPage.qml")
+        }
+    }
+    
+    MenuButton {
+        text: "EXIT"
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 857
+        anchors.rightMargin: 83
+        onClicked: {
+            Qt.quit() // Exit the application
+        }
+    }
 }

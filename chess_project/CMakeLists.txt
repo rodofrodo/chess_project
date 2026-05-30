@@ -35,10 +35,12 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         RESOURCE_PREFIX "/qt/qml/"
         QML_FILES
             main.qml
+            pages/CreditsPage.qml
             pages/StartPage.qml
             pages/MainMenu.qml
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
+            elements/MenuButton.qml
             assets/startpage_bg.png
             assets/mainmenu_bg.png
             assets/product-sans-bold.ttf
