@@ -52,6 +52,21 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             assets/product-sans-italic.ttf
             assets/product-sans-regular.ttf
             assets/icon.png
+            # -- pawns --
+            # black
+            assets/pawns/bishop_black.png
+            assets/pawns/king_black.png
+            assets/pawns/knight_black.png
+            assets/pawns/pawn_black.png
+            assets/pawns/queen_black.png
+            assets/pawns/rook_black.png
+            # white
+            assets/pawns/bishop_white.png
+            assets/pawns/king_white.png
+            assets/pawns/knight_white.png
+            assets/pawns/pawn_white.png
+            assets/pawns/queen_white.png
+            assets/pawns/rook_white.png
     )
 endif()
 

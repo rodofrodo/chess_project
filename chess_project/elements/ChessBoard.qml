@@ -8,6 +8,18 @@ Rectangle {
     color: "white" 
     radius: 25
 
+    Rectangle {
+        anchors.centerIn: parent
+        
+        // Make it exactly 2 pixels larger than the grid to hold the 1px border!
+        width: 890 
+        height: 890
+        
+        color: "transparent" // The inside is empty so we see the board
+        border.color: "black"
+        border.width: 1
+    }
+
     // The actual 8x8 playing grid
     Grid {
         id: boardGrid
@@ -33,6 +45,38 @@ Rectangle {
                 
                 // If row + col is even, it's white. If odd, it's black.
                 color: (row + col) % 2 === 0 ? "white" : "black"
+
+                // --- ADD THE PIECE IMAGE HERE ---
+                Image {
+                    anchors.centerIn: parent
+                    
+                    // Make the piece slightly smaller than the tile so it breathes
+                    width: parent.width * 0.65
+                    height: parent.height * 0.65
+                    fillMode: Image.PreserveAspectFit
+                    
+                    // The Magic Logic: What piece goes here?
+                    // The Magic Logic: What piece goes here?
+                    source: {
+                        // Define the standard order of pieces on the back row
+                        const backRow = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"];
+                        
+                        // Pawns
+                        if (row === 1) return "../assets/pawns/pawn_black.png"
+                        if (row === 6) return "../assets/pawns/pawn_white.png"
+                        
+                        // Black Back Row (Row 0)
+                        if (row === 0) return "../assets/pawns/" + backRow[col] + "_black.png"
+                        
+                        // White Back Row (Row 7)
+                        if (row === 7) return "../assets/pawns/" + backRow[col] + "_white.png"
+                        
+                        return "" // Empty square
+                    }
+                    
+                    // Only show the image if it actually has a file attached to it
+                    visible: source !== "" 
+                }
             }
         }
     }
