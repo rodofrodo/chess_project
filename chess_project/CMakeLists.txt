@@ -36,13 +36,17 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         QML_FILES
             main.qml
             pages/CreditsPage.qml
-            pages/StartPage.qml
+            pages/GamePage.qml
             pages/MainMenu.qml
+            pages/StartPage.qml
+            elements/ChessBoard.qml
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
             elements/MenuButton.qml
+            elements/GoBackBtn.qml
             assets/startpage_bg.png
             assets/mainmenu_bg.png
+            assets/creditspage_bg.png
             assets/product-sans-bold.ttf
             assets/product-sans-italic-bold.ttf
             assets/product-sans-italic.ttf

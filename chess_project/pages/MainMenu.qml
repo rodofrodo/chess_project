@@ -30,8 +30,7 @@ Page {
         anchors.topMargin: 565
         anchors.rightMargin: 83
         onClicked: {
-            // Navigate to the Play page
-            //mainStackView.push(playPage)
+            mainmenu.StackView.view.push("GamePage.qml")
         }
     }
     

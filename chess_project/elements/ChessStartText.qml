@@ -6,6 +6,7 @@ Item {
     implicitHeight: mainText.implicitHeight
 
     property string text: "CHESS"
+    property int fontSize: 168
 
     FontLoader {
         id: productSansBold
@@ -17,7 +18,7 @@ Item {
         id: mainText
         text: root.text
         font.family: productSansBold.name
-        font.pixelSize: 168
+        font.pixelSize: root.fontSize
         font.bold: true
         font.letterSpacing: 10
         color: "white"
@@ -33,7 +34,7 @@ Item {
         id: blueText
         text: root.text
         font.family: productSansBold.name
-        font.pixelSize: 168
+        font.pixelSize: root.fontSize
         font.bold: true
         font.letterSpacing: 10
         color: "#0000ff" 
@@ -64,7 +65,7 @@ Item {
         id: cyanText
         text: root.text
         font.family: productSansBold.name
-        font.pixelSize: 168
+        font.pixelSize: root.fontSize
         font.bold: true
         font.letterSpacing: 10
         color: "#00ffff" 
@@ -99,7 +100,7 @@ Item {
         id: yellowText
         text: root.text
         font.family: productSansBold.name
-        font.pixelSize: 168
+        font.pixelSize: root.fontSize
         font.bold: true
         font.letterSpacing: 10
         color: "#ffff00" 
@@ -130,7 +131,7 @@ Item {
         id: redText
         text: root.text
         font.family: productSansBold.name
-        font.pixelSize: 168
+        font.pixelSize: root.fontSize
         font.bold: true
         font.letterSpacing: 10
         color: "#ff0000" 
