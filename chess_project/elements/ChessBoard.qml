@@ -31,6 +31,8 @@ Rectangle {
         width: 888
         height: 888
 
+        property int selectedIndex: -1 // No tile is selected by default
+
         Repeater {
             model: 64
 
@@ -42,12 +44,23 @@ Rectangle {
                 // Calculate the row and col based on the 0-63 index
                 property int row: Math.floor(index / 8)
                 property int col: index % 8
+                property bool isLightSquare: (row + col) % 2 === 0
+                property bool isSelected: boardGrid.selectedIndex === index
                 
                 // If row + col is even, it's white. If odd, it's black.
-                color: (row + col) % 2 === 0 ? "white" : "black"
+                color: {
+                    if (isSelected) {
+                        // The Highlight Colors
+                        return isLightSquare ? "#f4f680" : "#baca44" 
+                    } else {
+                        // The Normal Board Colors (from your screenshots!)
+                        return isLightSquare ? "#ebecd0" : "#779556" 
+                    }
+                }
 
                 // --- ADD THE PIECE IMAGE HERE ---
                 Image {
+                    id: pieceImage
                     anchors.centerIn: parent
                     
                     // Make the piece slightly smaller than the tile so it breathes
@@ -76,6 +89,19 @@ Rectangle {
                     
                     // Only show the image if it actually has a file attached to it
                     visible: source !== "" 
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // Only select the square if it actually has a piece on it
+                        if (pieceImage.source.toString() !== "") {
+                            boardGrid.selectedIndex = index
+                        } else {
+                            // If they click an empty square, deselect everything
+                            boardGrid.selectedIndex = -1
+                        }
+                    }
                 }
             }
         }
