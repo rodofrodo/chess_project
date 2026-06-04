@@ -11,6 +11,7 @@ find_package(Qt${QT_VERSION_MAJOR}
     COMPONENTS
         Quick
 )
+
 qt_standard_project_setup()
 
 set(PROJECT_SOURCES
@@ -29,7 +30,9 @@ elseif(QT_VERSION VERSION_LESS 6.2)
     qt_add_resources(PROJECT_SOURCES qml.qrc)
 endif()
 
-qt_add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+qt_add_executable(chess_project ${PROJECT_SOURCES}
+    app_icon.rc
+)
 
 if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
     qt_add_qml_module(${PROJECT_NAME}
@@ -38,6 +41,38 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         RESOURCE_PREFIX "/qt/qml/"
         QML_FILES
             main.qml
+            pages/CreditsPage.qml
+            pages/GamePage.qml
+            pages/MainMenu.qml
+            pages/StartPage.qml
+            elements/ChessBoard.qml
+            elements/ChessStartText.qml
+            elements/GetStartedBtn.qml
+            elements/MenuButton.qml
+            elements/GoBackBtn.qml
+            assets/startpage_bg.png
+            assets/mainmenu_bg.png
+            assets/creditspage_bg.png
+            assets/product-sans-bold.ttf
+            assets/product-sans-italic-bold.ttf
+            assets/product-sans-italic.ttf
+            assets/product-sans-regular.ttf
+            assets/icon.png
+            # -- pawns --
+            # black
+            assets/pawns/bishop_black.png
+            assets/pawns/king_black.png
+            assets/pawns/knight_black.png
+            assets/pawns/pawn_black.png
+            assets/pawns/queen_black.png
+            assets/pawns/rook_black.png
+            # white
+            assets/pawns/bishop_white.png
+            assets/pawns/king_white.png
+            assets/pawns/knight_white.png
+            assets/pawns/pawn_white.png
+            assets/pawns/queen_white.png
+            assets/pawns/rook_white.png
     )
 endif()
 
@@ -46,7 +81,11 @@ set_target_properties(${PROJECT_NAME}
         WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Quick
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+        Qt::Quick
 )
+
+if(Qt6_FOUND)
+    qt_import_qml_plugins(${PROJECT_NAME})
+endif()
