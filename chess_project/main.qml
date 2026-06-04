@@ -27,6 +27,6 @@ Window {
         
         // This is the first page the app loads
         //initialItem: "pages/StartPage.qml" 
-        initialItem: "pages/GamePage.qml"
+        initialItem: "pages/GamePage.qml"// For testing purposes, we can start directly on the game page
     }
 }
