@@ -1,17 +1,32 @@
-import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Controls
 
 Window {
+    id: mainWindow
+    width: 1280
+    height: 720
     visible: true
-    width: 640
-    height: 480
-    title: "chess_project"
-    Text {
+    title: qsTr("Chess Game")
+    color: "black" // Prevents white flashes during page transitions
+    visibility: Window.FullScreen // Start in full-screen mode
+
+    Shortcut {
+        sequence: "F11"
+        onActivated: {
+            if (mainWindow.visibility === Window.FullScreen) {
+                mainWindow.showNormal() // Returns to standard windowed mode
+            } else {
+                mainWindow.showFullScreen() // Expands to cover the whole monitor
+            }
+        }
+    }
+
+    StackView {
+        id: stackView
         anchors.fill: parent
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.bold: true
-        font.pointSize: 42
-        text: "Hello World!"
+        
+        // This is the first page the app loads
+        //initialItem: "pages/StartPage.qml" 
+        initialItem: "pages/GamePage.qml"
     }
 }
