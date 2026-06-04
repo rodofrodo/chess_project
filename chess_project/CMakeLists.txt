@@ -15,11 +15,12 @@ qt_standard_project_setup()
 
 set(PROJECT_SOURCES
     main.cpp
-    Pawn.cpp
-    Pawn.h
-    Piece.cpp
     Piece.h
     Types.h
+    Pieces.cpp
+    Pieces.h
+    ChessBoardModel.cpp
+    ChessBoardModel.h
 )
 
 if(QT_VERSION VERSION_LESS 5.15)
@@ -45,12 +46,7 @@ set_target_properties(${PROJECT_NAME}
         WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC
-        Qt::Quick
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Quick
 )
-
-
-if(Qt6_FOUND)
-    qt_import_qml_plugins(${PROJECT_NAME})
-endif()
