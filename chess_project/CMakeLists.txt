@@ -16,12 +16,12 @@ qt_standard_project_setup()
 
 set(PROJECT_SOURCES
     main.cpp
-    Piece.h
-    Types.h
-    Pieces.cpp
-    Pieces.h
-    ChessBoardModel.cpp
-    ChessBoardModel.h
+    logic/Piece.h
+    logic/Types.h
+    logic/Pieces.cpp
+    logic/Pieces.h
+    logic/ChessBoardModel.cpp
+    logic/ChessBoardModel.h
 )
 
 if(QT_VERSION VERSION_LESS 5.15)
