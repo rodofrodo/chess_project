@@ -63,17 +63,18 @@ Rectangle {
                     }
                 }
 
-                z: 0 // Simplification since drag/drop is removed
+                z: clickArea.drag.active ? 1 : 0 // Ensure the dragged piece is always on top
 
                 // --- ADD THE PIECE IMAGE HERE ---
                 Image {
                     id: pieceImage
-                    
-                    // Make the piece slightly smaller than the tile so it breathes
                     width: parent.width * 0.65
                     height: parent.height * 0.65
                     fillMode: Image.PreserveAspectFit
-                    anchors.centerIn: parent
+                    
+                    // Dynamic position layout for snapping
+                    x: clickArea.drag.active ? undefined : (parent.width - width) / 2
+                    y: clickArea.drag.active ? undefined : (parent.height - height) / 2
                     
                     // The Magic Logic: What piece goes here?
                     property string pieceName: root.getPieceName(model.pieceType, model.pieceColor)
@@ -82,12 +83,49 @@ Rectangle {
                 }
 
                 MouseArea {
-                    id: clickArea                    
+                    id: clickArea
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     
-                    onClicked: {
+                    drag.target: pieceImage
+                    drag.axis: Drag.XAndYAxis
+                    
+                    // 1. A flag to separate pure clicks from drag-and-drops
+                    property bool dragOccurred: false
+                    
+                    // If the mouse moves while dragging, flip the flag to true
+                    onPositionChanged: {
+                        if (drag.active) dragOccurred = true;
+                    }
+
+                    onPressed: {
+                        dragOccurred = false; // Reset flag on every new click
+                        
+                        // Tell C++ we interacted with this square.
+                        // - If it's a click, C++ selects the piece. 
+                        // - If it's an empty square, C++ attempts a move!
                         boardModel.selectSquare(index);
+                    }
+
+                    onReleased: {
+                        // 2. Only run the drop math if they ACTUALLY dragged the piece
+                        if (dragOccurred) {
+                            var gridPoint = mapToItem(boardGrid, mouseX, mouseY);
+                            var targetCol = Math.floor(gridPoint.x / tile.width);
+                            var targetRow = Math.floor(gridPoint.y / tile.height);
+                            
+                            if (targetCol >= 0 && targetCol < 8 && targetRow >= 0 && targetRow < 8) {
+                                var targetIndex = (targetRow * 8) + targetCol;
+                                
+                                // Only trigger the backend if dropped on a DIFFERENT tile
+                                if (targetIndex !== index) {
+                                    boardModel.selectSquare(targetIndex);
+                                }
+                            }
+                        }
+                        
+                        // Reset the flag for the next interaction
+                        dragOccurred = false; 
                     }
                 }
             }
