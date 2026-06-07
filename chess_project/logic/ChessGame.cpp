@@ -91,14 +91,27 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
 }
 
 void ChessGame::selectSquare(int row, int col) {
-    if (selectedRow == -1 && selectedCol == -1) {
-        if (board[row][col] && board[row][col]->getColor() == currentTurn) {
-            selectedRow = row;
-            selectedCol = col;
-            highlightedMoves = getLegalMoves(board[row][col]);
-        }
+    // SCENARIO 1: We clicked the EXACT piece that is already selected.
+    // Action: Deselect it.
+    if (selectedRow == row && selectedCol == col) {
+        selectedRow = -1;
+        selectedCol = -1;
+        highlightedMoves.clear();
+        return;
     }
-    else {
+
+    // SCENARIO 2: We clicked a piece that belongs to the current player.
+    // Action: Select it (or switch the selection to it) and show its moves.
+    if (board[row][col] && board[row][col]->getColor() == currentTurn) {
+        selectedRow = row;
+        selectedCol = col;
+        highlightedMoves = getLegalMoves(board[row][col]);
+        return;
+    }
+
+    // SCENARIO 3: We already have a piece selected, and we clicked an empty square or enemy piece.
+    // Action: Try to move!
+    if (selectedRow != -1 && selectedCol != -1) {
         bool isValidMove = false;
         for (auto m : highlightedMoves) {
             if (m.row == row && m.col == col) {
@@ -109,9 +122,12 @@ void ChessGame::selectSquare(int row, int col) {
 
         if (isValidMove) {
             movePiece(selectedRow, selectedCol, row, col);
+
+            // Swap turns
             currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
         }
 
+        // Whether the move was valid or invalid, clear the selection
         selectedRow = -1;
         selectedCol = -1;
         highlightedMoves.clear();
