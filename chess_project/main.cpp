@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QIcon>
+#include "connection/ChessBoardQmlModel.h"
 
 int main(int argc, char* argv[])
 {
@@ -10,6 +12,9 @@ int main(int argc, char* argv[])
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    ChessBoardQmlModel boardModel;
+    engine.rootContext()->setContextProperty("boardModel", &boardModel);
 
     app.setWindowIcon(QIcon(":/qt/qml/chess_project/assets/icon.png"));
 

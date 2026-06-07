@@ -1,11 +1,25 @@
-#include "ChessBoardModel.h"
+#include "ChessGame.h"
 #include "Pieces.h"
 
-ChessBoardModel::ChessBoardModel(QObject* parent) : QAbstractListModel(parent) {
+ChessGame::ChessGame() {
     setupBoard();
 }
 
-void ChessBoardModel::setupBoard() {
+std::shared_ptr<Piece> ChessGame::getPieceAt(int row, int col) const {
+    if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+        return board[row][col];
+    }
+    return nullptr;
+}
+
+bool ChessGame::isHighlighted(int row, int col) const {
+    for (const auto& m : highlightedMoves) {
+        if (m.row == row && m.col == col) return true;
+    }
+    return false;
+}
+
+void ChessGame::setupBoard() {
     board.assign(8, std::vector<std::shared_ptr<Piece>>(8, nullptr));
 
     auto setupRow = [&](int row, Color color) {
@@ -28,30 +42,7 @@ void ChessBoardModel::setupBoard() {
     }
 }
 
-int ChessBoardModel::rowCount(const QModelIndex&) const {
-    return 64;
-}
-
-QVariant ChessBoardModel::data(const QModelIndex& index, int role) const {
-    if (!index.isValid()) return QVariant();
-    int r = index.row() / 8;
-    int c = index.row() % 8;
-    auto piece = board[r][c];
-
-    if (role == TypeRole) return piece ? static_cast<int>(piece->getType()) : -1;
-    if (role == ColorRole) return piece ? static_cast<int>(piece->getColor()) : -1;
-    if (role == HighlightRole) {
-        for (const auto& m : highlightedMoves) if (m.row == r && m.col == c) return true;
-        return false;
-    }
-    return QVariant();
-}
-
-QHash<int, QByteArray> ChessBoardModel::roleNames() const {
-    return { {TypeRole, "pieceType"}, {ColorRole, "pieceColor"}, {HighlightRole, "isHighlighted"} };
-}
-
-bool ChessBoardModel::isCheck(Color kingColor) const {
+bool ChessGame::isCheck(Color kingColor) const {
     Position kingPos{ -1, -1 };
     for (int r = 0; r < 8; ++r) {
         for (int c = 0; c < 8; ++c) {
@@ -75,7 +66,7 @@ bool ChessBoardModel::isCheck(Color kingColor) const {
     return false;
 }
 
-std::vector<Position> ChessBoardModel::getLegalMoves(std::shared_ptr<Piece> piece) {
+std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
     auto rawMoves = piece->getValidMoves(board);
     std::vector<Position> legalMoves;
 
@@ -99,33 +90,51 @@ std::vector<Position> ChessBoardModel::getLegalMoves(std::shared_ptr<Piece> piec
     return legalMoves;
 }
 
-void ChessBoardModel::selectSquare(int index) {
-    int r = index / 8;
-    int c = index % 8;
-
-    if (selectedIndex == -1) {
-        if (board[r][c] && board[r][c]->getColor() == currentTurn) {
-            selectedIndex = index;
-            highlightedMoves = getLegalMoves(board[r][c]);
-            emit dataChanged(createIndex(0, 0), createIndex(63, 0), { HighlightRole });
-        }
+void ChessGame::selectSquare(int row, int col) {
+    // SCENARIO 1: We clicked the EXACT piece that is already selected.
+    // Action: Deselect it.
+    if (selectedRow == row && selectedCol == col) {
+        selectedRow = -1;
+        selectedCol = -1;
+        highlightedMoves.clear();
+        return;
     }
-    else {
+
+    // SCENARIO 2: We clicked a piece that belongs to the current player.
+    // Action: Select it (or switch the selection to it) and show its moves.
+    if (board[row][col] && board[row][col]->getColor() == currentTurn) {
+        selectedRow = row;
+        selectedCol = col;
+        highlightedMoves = getLegalMoves(board[row][col]);
+        return;
+    }
+
+    // SCENARIO 3: We already have a piece selected, and we clicked an empty square or enemy piece.
+    // Action: Try to move!
+    if (selectedRow != -1 && selectedCol != -1) {
         bool isValidMove = false;
-        for (auto m : highlightedMoves) if (m.row == r && m.col == c) isValidMove = true;
+        for (auto m : highlightedMoves) {
+            if (m.row == row && m.col == col) {
+                isValidMove = true;
+                break;
+            }
+        }
 
         if (isValidMove) {
-            movePiece(selectedIndex / 8, selectedIndex % 8, r, c);
+            movePiece(selectedRow, selectedCol, row, col);
+
+            // Swap turns
             currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
         }
 
-        selectedIndex = -1;
+        // Whether the move was valid or invalid, clear the selection
+        selectedRow = -1;
+        selectedCol = -1;
         highlightedMoves.clear();
-        emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
     }
 }
 
-void ChessBoardModel::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
+void ChessGame::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     auto piece = board[fromRow][fromCol];
     piece->setPosition({ toRow, toCol });
     piece->markAsMoved();
