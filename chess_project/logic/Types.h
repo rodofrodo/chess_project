@@ -1,24 +1,12 @@
 #pragma once
 
-enum class Color {
-    White,
-    Black
-};
-
-enum class PieceType {
-    Pawn,
-    Rook,
-    Knight,
-    Bishop,
-    Queen,
-    King
-};
+enum class Color { White, Black };
+enum class PieceType { Pawn = 0, Rook = 1, Knight = 2, Bishop = 3, Queen = 4, King = 5 };
+enum class GameState { Active, Promotion, WhiteWins, BlackWins, Stalemate };
 
 struct Position {
     int row;
     int col;
-
-    bool operator==(const Position& other) const {
-        return row == other.row && col == other.col;
-    }
+    bool operator==(const Position& other) const { return row == other.row && col == other.col; }
+    bool operator!=(const Position& other) const { return !(*this == other); }
 };
