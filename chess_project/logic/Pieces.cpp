@@ -44,7 +44,9 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<std::sha
         moves.push_back({ r, c });
         if (!getHasMoved()) {
             int r2 = r + dir;
-            if (r2 >= 0 && r2 < 8 && !board[r2][c]) moves.push_back({ r2, c });
+            if (r2 >= 0 && r2 < 8 && !board[r2][c]) {
+                moves.push_back({ r2, c });
+            }
         }
     }
 
