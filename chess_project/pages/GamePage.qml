@@ -35,7 +35,7 @@ Page {
         anchors.topMargin: 65
 
         isDark: true
-        timeText: "59:59"
+        timeText: "0:00"
         rotationAngle: 180
     }
 
@@ -48,7 +48,22 @@ Page {
         anchors.bottomMargin: 65
 
         isDark: false
-        timeText: "59:59"
+        timeText: "0:00"
         rotationAngle: 180
+    }
+
+    TimeControlMenu {
+        anchors.right: parent.right
+        anchors.rightMargin: 50
+
+        onContinueClicked: (index, text) => {
+            console.log("Starting a game of type: " + text);
+        
+            // 1. Tell the C++ backend to configure the game timers based on the index
+            // gameModel.setTimeControl(index); 
+        
+            // 2. Flip the UI to the actual game history panel
+            rightPanelStack.currentIndex = 1; 
+        }
     }
 }
