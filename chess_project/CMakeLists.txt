@@ -41,15 +41,22 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         RESOURCE_PREFIX "/qt/qml/"
         QML_FILES
             main.qml
+            # pages
             pages/CreditsPage.qml
             pages/GamePage.qml
             pages/MainMenu.qml
             pages/StartPage.qml
+            # elements
+            elements/CapturedPieces.qml
             elements/ChessBoard.qml
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
             elements/MenuButton.qml
             elements/GoBackBtn.qml
+            elements/MoveHistoryPanel.qml
+            elements/PlayerTimer.qml
+            elements/TimeControlMenu.qml
+            # assets
             assets/startpage_bg.png
             assets/mainmenu_bg.png
             assets/creditspage_bg.png
