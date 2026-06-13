@@ -17,6 +17,16 @@ Rectangle {
         //timerContainer.rotationAngle = 0; 
     //}
 
+    FontLoader {
+        id: productSansBold
+        source: "../assets/product-sans-bold.ttf"
+    }
+
+    FontLoader {
+        id: productSansRegular
+        source: "../assets/product-sans-regular.ttf"
+    }
+
     Row {
         anchors.centerIn: parent
         spacing: 15
@@ -25,6 +35,7 @@ Rectangle {
         Item {
             width: 36
             height: 36
+            anchors.verticalCenter: parent.verticalCenter
 
             // The Circle (The clock face)
             Rectangle {
@@ -59,7 +70,7 @@ Rectangle {
         // The Time Text
         Text {
             text: timerContainer.timeText
-            font.family: "Arial"
+            font.family: productSansBold.name
             font.pixelSize: 32
             font.bold: true
             color: isDark ? "#ffffff" : "#000000"
