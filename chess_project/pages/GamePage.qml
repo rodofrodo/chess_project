@@ -20,6 +20,8 @@ Page {
     }
 
     ChessBoard {
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 220
     }
 }
