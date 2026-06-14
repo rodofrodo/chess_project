@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QIcon>
 #include <QQuickStyle>
+#include "connection/ChessBoardQmlModel.h"
 
 int main(int argc, char* argv[])
 {
