@@ -63,7 +63,7 @@ Page {
         anchors.left: board.right        
         anchors.leftMargin: 50        
         anchors.top: parent.top        
-        anchors.topMargin: 200 
+        anchors.topMargin: 50
         // We must anchor the bottom too, otherwise the history list won't know how far to scroll!
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 50
