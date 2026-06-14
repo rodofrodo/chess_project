@@ -85,7 +85,7 @@ endif()
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
-        WIN32_EXECUTABLE FALSE # For GUI applications on Windows, set this to TRUE. For console applications, set it to FALSE.
+        WIN32_EXECUTABLE TRUE # For GUI applications on Windows, set this to TRUE. For console applications, set it to FALSE.
 )
 
 target_link_libraries(${PROJECT_NAME}

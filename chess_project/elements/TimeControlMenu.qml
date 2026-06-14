@@ -20,17 +20,27 @@ Item {
         "BULLET [<3 min]" // <-- Fixed the typo here!
     ]
 
+    FontLoader {
+        id: productSansBold
+        source: "../assets/product-sans-bold.ttf"
+    }
+
+    FontLoader {
+        id: productSansRegular
+        source: "../assets/product-sans-regular.ttf"
+    }
+
     Column {
         anchors.centerIn: parent
         spacing: 30
-        width: 350 // This controls how wide the blue highlight bar gets
+        width: 500 // This controls how wide the blue highlight bar gets
 
         // 1. The Header
         Text {
             text: "Choose a time control"
             color: "white"
-            font.family: "Arial"
-            font.pixelSize: 28
+            font.family: productSansBold.name
+            font.pixelSize: 48
             font.bold: true
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -57,8 +67,8 @@ Item {
                         // If selected, make text cyan. If not, make it white.
                         color: menuRoot.selectedIndex === index ? "#00ffff" : "white"
                         // Using a monospace font gives it that authentic digital look
-                        font.family: "Courier New" 
-                        font.pixelSize: 20
+                        font.family: "Lucida Console" 
+                        font.pixelSize: 36
                         anchors.centerIn: parent
                     }
 

@@ -55,6 +55,10 @@ Page {
     TimeControlMenu {
         anchors.right: parent.right
         anchors.rightMargin: 50
+        anchors.left: board.right
+        anchors.leftMargin: 50
+        anchors.top: parent.top
+        anchors.topMargin: 200
 
         onContinueClicked: (index, text) => {
             console.log("Starting a game of type: " + text);
