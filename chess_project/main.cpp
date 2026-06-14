@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
-#include "connection/ChessBoardQmlModel.h"
+#include <QQuickStyle>
 
 int main(int argc, char* argv[])
 {
@@ -11,6 +11,9 @@ int main(int argc, char* argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+
+    QQuickStyle::setStyle("Basic");
+
     QQmlApplicationEngine engine;
 
     ChessBoardQmlModel boardModel;
