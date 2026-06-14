@@ -60,11 +60,11 @@ Page {
         anchors.top: parent.top
         anchors.topMargin: 200
 
-        onContinueClicked: (index, text) => {
-            console.log("Starting a game of type: " + text);
+        onStartClicked: (category, timeControl) => {
+            console.log("Starting a game of type: " + category + " with time: " + timeControl);
         
-            // 1. Tell the C++ backend to configure the game timers based on the index
-            // gameModel.setTimeControl(index); 
+            // 1. Tell the C++ backend to configure the game timers based on the selection
+            // gameModel.setTimeControl(timeControl); 
         
             // 2. Flip the UI to the actual game history panel
             rightPanelStack.currentIndex = 1; 
