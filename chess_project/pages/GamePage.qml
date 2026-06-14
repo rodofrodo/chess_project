@@ -88,4 +88,31 @@ Page {
             // No anchors needed here either!
         }
     }
+
+    // TOP CAPTURED PIECES (White pieces captured by the top player)
+    CapturedPieces {
+        id: topCaptured
+        anchors.right: board.left
+        anchors.rightMargin: 20
+        anchors.top: blackTimer.bottom
+        anchors.topMargin: 15
+        pieceColor: "white"
+        
+        // Mock data to test the layout
+        capturedList: ["rook", "knight", "bishop", "pawn", "pawn", "pawn"]
+    }
+
+    // BOTTOM CAPTURED PIECES (Black pieces captured by the bottom player)
+    // Notice we use bottom anchors so they grow upwards towards the board center
+    CapturedPieces {
+        id: bottomCaptured
+        anchors.right: board.left
+        anchors.rightMargin: 20
+        anchors.bottom: whiteTimer.top
+        anchors.bottomMargin: 15
+        pieceColor: "black"
+        
+        // Mock data to test the layout
+        capturedList: ["queen", "pawn", "pawn"]
+    }
 }
