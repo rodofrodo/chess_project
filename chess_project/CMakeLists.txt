@@ -21,8 +21,10 @@ set(PROJECT_SOURCES
     logic/Types.h
     logic/Pieces.cpp
     logic/Pieces.h
-    logic/ChessBoardModel.cpp
-    logic/ChessBoardModel.h
+    logic/ChessGame.cpp
+    logic/ChessGame.h
+    connection/ChessBoardQmlModel.cpp
+    connection/ChessBoardQmlModel.h
 )
 
 if(QT_VERSION VERSION_LESS 5.15)

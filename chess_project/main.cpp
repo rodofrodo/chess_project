@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QIcon>
 #include <QQuickStyle>
 
@@ -14,6 +15,9 @@ int main(int argc, char* argv[])
     QQuickStyle::setStyle("Basic");
 
     QQmlApplicationEngine engine;
+
+    ChessBoardQmlModel boardModel;
+    engine.rootContext()->setContextProperty("boardModel", &boardModel);
 
     app.setWindowIcon(QIcon(":/qt/qml/chess_project/assets/icon.png"));
 
