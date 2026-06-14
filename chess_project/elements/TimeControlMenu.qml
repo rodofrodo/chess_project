@@ -19,10 +19,10 @@ Item {
     // THE MASTER DATA DICTIONARY
     // This defines exactly what options appear for each category!
     property var timeData: {
-        "CLASSICAL [>60 min]": ["60 | 0", "90 | 30", "custom"],
-        "RAPID [10-60 min]": ["10 | 0", "15 | 10", "30 | 0", "custom"],
-        "BLITZ [3-10 min]": ["3 | 0", "3 | 2", "5 | 0", "5 | 3", "custom"],
-        "BULLET [<3 min]": ["1 | 0", "1 | 1", "2 | 1", "custom"]
+        "CLASSICAL [>60 min]": ["60 | 0", "90 | 30"],
+        "RAPID [10-60 min]": ["10 | 0", "15 | 10", "30 | 0"],
+        "BLITZ [3-10 min]": ["3 | 0", "3 | 2", "5 | 0", "5 | 3"],
+        "BULLET [<3 min]": ["1 | 0", "1 | 1", "2 | 1"]
     }
 
     // Helper arrays to feed the Repeater
@@ -61,7 +61,7 @@ Item {
 
         // Back Button (Only visible when picking specific times)
         Text {
-            text: "< Back to categories"
+            text: "Back to categories"
             color: "#888888"
             font.family: productSansRegular.name
             font.pixelSize: 18
