@@ -87,6 +87,7 @@ Item {
         Item { width: 1; height: 30 }
 
         // 3. The Continue Button
+        /*
         Rectangle {
             width: 160
             height: 45
@@ -114,6 +115,46 @@ Item {
                 onClicked: {
                     // Fire the signal so the parent GamePage can swap the UI
                     menuRoot.continueClicked(menuRoot.selectedIndex, menuRoot.options[menuRoot.selectedIndex])
+                }
+            }*/
+        Rectangle {
+            id: bgRect
+            width: 200            
+            height: 50
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "white"
+            radius: height / 2
+
+            // A beautiful, smooth press and hover effect
+            scale: mouseArea.pressed ? 0.95 : 1.0
+            opacity: mouseArea.containsMouse ? 0.8 : 1.0
+        
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+
+            Text {
+                text: "Continue"
+                color: "black"
+                font.family: productSansBold.name
+
+                font.pixelSize: 24
+                font.bold: true
+                anchors.centerIn: parent
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+
+                // Add a tiny visual click effect
+                onPressed: parent.scale = 0.95
+                onReleased: parent.scale = 1.0
+            
+                onClicked: {
+                    // Fire the signal so the parent GamePage can swap the UI
+                    console.log(menuRoot.selectedIndex + "&" + menuRoot.options[menuRoot.selectedIndex]);
                 }
             }
         }
