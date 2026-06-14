@@ -80,7 +80,7 @@ endif()
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
-        WIN32_EXECUTABLE TRUE
+        WIN32_EXECUTABLE FALSE
 )
 
 target_link_libraries(${PROJECT_NAME}
