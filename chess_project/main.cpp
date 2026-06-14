@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QQuickStyle>
 
 int main(int argc, char* argv[])
 {
@@ -9,6 +10,9 @@ int main(int argc, char* argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+
+    QQuickStyle::setStyle("Basic");
+
     QQmlApplicationEngine engine;
 
     app.setWindowIcon(QIcon(":/qt/qml/chess_project/assets/icon.png"));
