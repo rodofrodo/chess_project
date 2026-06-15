@@ -68,17 +68,7 @@ Item {
             spacing: 4
             clip: true // VERY IMPORTANT: Prevents items from scrolling outside the rounded box
 
-            // Temporary mock data so you can see it work!
-            // Later, you will replace this with: model: gameModel.moveHistory
-            model: ListModel {
-                ListElement { whiteMove: "f4"; blackMove: "Nc6" }
-                ListElement { whiteMove: "e4"; blackMove: "Nd4" }
-                ListElement { whiteMove: "g4"; blackMove: "e5" }
-                ListElement { whiteMove: "f5"; blackMove: "Nf6" }
-                ListElement { whiteMove: "h3"; blackMove: "d5" }
-                ListElement { whiteMove: "exd5"; blackMove: "Qxd5" }
-                ListElement { whiteMove: "Qf3"; blackMove: "e4" }
-            }
+            model: boardModel.moveHistoryList
 
             delegate: Rectangle {
                 width: moveList.width
@@ -106,7 +96,7 @@ Item {
 
                     // White's Move
                     Text {
-                        text: model.whiteMove
+                        text: modelData.whiteMove
                         color: "#d4d4d4" // Slightly brighter than black's text
                         font.family: productSansBold.name
                         font.pixelSize: 18
@@ -117,7 +107,7 @@ Item {
                     // Black's Move
                     Text {
                         // If black hasn't moved yet on this turn, show nothing
-                        text: model.blackMove ? model.blackMove : ""
+                        text: modelData.blackMove ? modelData.blackMove : ""
                         color: "#888888"
                         font.family: productSansBold.name
                         font.pixelSize: 18
