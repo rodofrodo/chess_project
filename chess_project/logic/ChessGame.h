@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Piece.h"
+#include "ChessClock.h"
 
 class ChessGame {
 public:
@@ -11,6 +12,9 @@ public:
     void selectSquare(int row, int col);
     GameState getGameState() const;
     void promotePawn(PieceType type);
+    void startGame(int totalMinutes, int incrementSeconds);
+    void updateClock();
+    const ChessClock& getClock() const;
 
 private:
     std::vector<std::vector<std::shared_ptr<Piece>>> board;
@@ -18,9 +22,10 @@ private:
     int selectedCol = -1;
     std::vector<Position> highlightedMoves;
     Color currentTurn = Color::White;
-    GameState gameState = GameState::Active;
+    GameState gameState = GameState::WaitingForStart;
     Position enPassantTarget = { -1, -1 };
     Position pendingPromotion = { -1, -1 };
+    ChessClock clock;
 
     void setupBoard();
     bool isCheck(Color kingColor) const;

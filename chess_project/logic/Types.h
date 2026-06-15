@@ -2,7 +2,7 @@
 
 enum class Color { White, Black };
 enum class PieceType { Pawn = 0, Rook = 1, Knight = 2, Bishop = 3, Queen = 4, King = 5 };
-enum class GameState { Active, Promotion, WhiteWins, BlackWins, Stalemate };
+enum class GameState { WaitingForStart, Active, Promotion, WhiteWins, BlackWins, Stalemate, TimeOutWhite, TimeOutBlack };
 
 struct Position {
     int row;

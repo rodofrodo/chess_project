@@ -1,5 +1,6 @@
 #pragma once
 #include <QAbstractListModel>
+#include <QTimer>
 #include <memory>
 #include "../logic/ChessGame.h"
 
@@ -7,6 +8,8 @@ class ChessBoardQmlModel : public QAbstractListModel {
     Q_OBJECT
         Q_PROPERTY(QString gameStateText READ getGameStateText NOTIFY gameStateChanged)
         Q_PROPERTY(bool isPromotionActive READ getIsPromotionActive NOTIFY promotionChanged)
+        Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
+        Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
 
 public:
     enum ChessRoles { TypeRole = Qt::UserRole + 1, ColorRole, HighlightRole };
@@ -18,14 +21,21 @@ public:
 
     Q_INVOKABLE void selectSquare(int index);
     Q_INVOKABLE void promotePawn(int pieceType);
+    Q_INVOKABLE void startGame(QString timeControl);
 
     QString getGameStateText() const;
     bool getIsPromotionActive() const;
+    QString getWhiteTimeText() const;
+    QString getBlackTimeText() const;
 
 signals:
     void gameStateChanged();
     void promotionChanged();
+    void timeChanged();
 
 private:
     std::unique_ptr<ChessGame> game;
+    QTimer* timer;
+
+    void onTick();
 };

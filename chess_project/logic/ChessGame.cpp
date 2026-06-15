@@ -4,6 +4,7 @@
 
 ChessGame::ChessGame() {
     setupBoard();
+    gameState = GameState::WaitingForStart;
 }
 
 std::shared_ptr<Piece> ChessGame::getPieceAt(int row, int col) const {
@@ -18,6 +19,32 @@ bool ChessGame::isHighlighted(int row, int col) const {
 
 GameState ChessGame::getGameState() const {
     return gameState;
+}
+
+void ChessGame::startGame(int totalMinutes, int incrementSeconds) {
+    setupBoard();
+    currentTurn = Color::White;
+    enPassantTarget = { -1, -1 };
+    pendingPromotion = { -1, -1 };
+    selectedRow = -1;
+    selectedCol = -1;
+    highlightedMoves.clear();
+    gameState = GameState::Active;
+    clock.start(totalMinutes, incrementSeconds);
+}
+
+void ChessGame::updateClock() {
+    if (gameState != GameState::Active) return;
+    clock.tick();
+    if (clock.isTimeOut(Color::White)) {
+        gameState = GameState::TimeOutWhite;
+    } else if (clock.isTimeOut(Color::Black)) {
+        gameState = GameState::TimeOutBlack;
+    }
+}
+
+const ChessClock& ChessGame::getClock() const {
+    return clock;
 }
 
 void ChessGame::setupBoard() {
@@ -125,7 +152,7 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
 }
 
 void ChessGame::selectSquare(int row, int col) {
-    if (gameState != GameState::Active) return;
+    if (gameState != GameState::Active && gameState != GameState::Promotion) return;
 
     if (selectedRow == -1 && selectedCol == -1) {
         if (board[row][col] && board[row][col]->getColor() == currentTurn) {
@@ -141,6 +168,7 @@ void ChessGame::selectSquare(int row, int col) {
             movePiece(selectedRow, selectedCol, row, col);
             if (gameState != GameState::Promotion) {
                 currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
+                clock.switchTurn();
                 updateGameState();
             }
         }
@@ -206,6 +234,7 @@ void ChessGame::promotePawn(PieceType type) {
     gameState = GameState::Active;
 
     currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
+    clock.switchTurn();
     updateGameState();
 }
 

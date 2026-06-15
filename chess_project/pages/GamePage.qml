@@ -36,7 +36,7 @@ Page {
         anchors.topMargin: 65
 
         isDark: true
-        timeText: "0:00"
+        timeText: boardModel.blackTimeText
         rotationAngle: 180
     }
 
@@ -49,7 +49,7 @@ Page {
         anchors.bottomMargin: 65
 
         isDark: false
-        timeText: "0:00"
+        timeText: boardModel.whiteTimeText
         rotationAngle: 180
     }
 
@@ -76,7 +76,7 @@ Page {
                 console.log("Starting a game of type: " + category + " with time: " + timeControl);
             
                 // 1. Tell the C++ backend to configure the game timers based on the selection
-                // gameModel.setTimeControl(timeControl); 
+                boardModel.startGame(timeControl); 
             
                 // 2. Flip the UI to the actual game history panel
                 rightPanelStack.currentIndex = 1; 
