@@ -10,6 +10,7 @@ class ChessBoardQmlModel : public QAbstractListModel {
         Q_PROPERTY(bool isPromotionActive READ getIsPromotionActive NOTIFY promotionChanged)
         Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
         Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
+        Q_PROPERTY(bool isWhiteTurn READ getIsWhiteTurn NOTIFY gameStateChanged)
 
 public:
     enum ChessRoles { TypeRole = Qt::UserRole + 1, ColorRole, HighlightRole };
@@ -27,6 +28,7 @@ public:
     bool getIsPromotionActive() const;
     QString getWhiteTimeText() const;
     QString getBlackTimeText() const;
+    bool getIsWhiteTurn() const;
 
 signals:
     void gameStateChanged();

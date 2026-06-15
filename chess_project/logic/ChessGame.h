@@ -11,6 +11,7 @@ public:
     bool isHighlighted(int row, int col) const;
     void selectSquare(int row, int col);
     GameState getGameState() const;
+    Color getCurrentTurn() const { return currentTurn; }
     void promotePawn(PieceType type);
     void startGame(int totalMinutes, int incrementSeconds);
     void updateClock();

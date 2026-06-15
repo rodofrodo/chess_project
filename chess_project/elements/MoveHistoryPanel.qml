@@ -6,8 +6,8 @@ Item {
     width: 400
     height: 600 // Adjust this to fit nicely next to your board
 
-    // Property to toggle the top indicator
-    property bool isWhiteTurn: true
+    // Property synchronized with the backend game model
+    property bool isWhiteTurn: boardModel.isWhiteTurn
 
     FontLoader {
         id: productSansBold
@@ -42,12 +42,7 @@ Item {
             Behavior on color { ColorAnimation { duration: 300 } }
         }
 
-// TESTING
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: historyPanel.isWhiteTurn = !historyPanel.isWhiteTurn
-        }
+
     }
 
     // ==========================================

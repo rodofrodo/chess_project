@@ -111,3 +111,7 @@ QString ChessBoardQmlModel::getBlackTimeText() const {
     s %= 60;
     return QString::asprintf("%d:%02d", m, s);
 }
+
+bool ChessBoardQmlModel::getIsWhiteTurn() const {
+    return game->getCurrentTurn() == Color::White;
+}
