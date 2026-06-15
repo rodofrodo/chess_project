@@ -98,8 +98,7 @@ Page {
         anchors.topMargin: 15
         pieceColor: "white"
         
-        // Mock data to test the layout
-        capturedList: ["rook", "knight", "bishop", "pawn", "pawn", "pawn"]
+        capturedList: boardModel.blackCapturedList
     }
 
     // BOTTOM CAPTURED PIECES (Black pieces captured by the bottom player)
@@ -112,7 +111,6 @@ Page {
         anchors.bottomMargin: 15
         pieceColor: "black"
         
-        // Mock data to test the layout
-        capturedList: ["queen", "pawn", "pawn"]
+        capturedList: boardModel.whiteCapturedList
     }
 }

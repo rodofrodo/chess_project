@@ -6,7 +6,7 @@ Column {
     
     // Tightly pack the pieces. You can even use a negative number like -5 
     // to make them overlap slightly if the column gets too long!
-    spacing: 2 
+    spacing: -8 
 
     // The color of the pieces in this specific column ("white" or "black")
     property string pieceColor: "white"
@@ -24,7 +24,7 @@ Column {
             fillMode: Image.PreserveAspectFit
             
             // Dynamically load the image based on the array data and color property
-            source: "../assets/pawns/" + modelData + "_" + capturedRoot.pieceColor + ".png"
+            source: "../assets/pawns/" + modelData + "_" + capturedRoot.pieceColor + ".svg"
             
             // A subtle fade-in effect when a new piece gets captured
             opacity: 0.0

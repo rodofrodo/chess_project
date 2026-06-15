@@ -11,6 +11,14 @@ const std::vector<MoveRecord>& ChessGame::getMoveHistory() const {
     return moveHistory;
 }
 
+const std::vector<PieceType>& ChessGame::getWhiteCapturedPieces() const {
+    return whiteCapturedPieces;
+}
+
+const std::vector<PieceType>& ChessGame::getBlackCapturedPieces() const {
+    return blackCapturedPieces;
+}
+
 std::shared_ptr<Piece> ChessGame::getPieceAt(int row, int col) const {
     if (row >= 0 && row < 8 && col >= 0 && col < 8) return board[row][col];
     return nullptr;
@@ -34,6 +42,8 @@ void ChessGame::startGame(int totalMinutes, int incrementSeconds) {
     selectedCol = -1;
     highlightedMoves.clear();
     moveHistory.clear();
+    whiteCapturedPieces.clear();
+    blackCapturedPieces.clear();
     gameState = GameState::Active;
     clock.start(totalMinutes, incrementSeconds);
 }
@@ -175,6 +185,22 @@ void ChessGame::selectSquare(int row, int col) {
             bool isCastling = (piece->getType() == PieceType::King && std::abs(selectedCol - col) == 2);
             Color movingColor = currentTurn;
             std::string moveStr = toAlgebraic(piece, {selectedRow, selectedCol}, {row, col}, isCapture, isCastling);
+
+            std::shared_ptr<Piece> capturedPiece = nullptr;
+            if (isCapture) {
+                if (board[row][col] != nullptr) {
+                    capturedPiece = board[row][col];
+                } else {
+                    capturedPiece = board[selectedRow][col];
+                }
+            }
+            if (capturedPiece) {
+                if (movingColor == Color::White) {
+                    whiteCapturedPieces.push_back(capturedPiece->getType());
+                } else {
+                    blackCapturedPieces.push_back(capturedPiece->getType());
+                }
+            }
 
             movePiece(selectedRow, selectedCol, row, col);
             if (gameState != GameState::Promotion) {

@@ -12,6 +12,8 @@ class ChessBoardQmlModel : public QAbstractListModel {
         Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
         Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
         Q_PROPERTY(bool isWhiteTurn READ getIsWhiteTurn NOTIFY gameStateChanged)
+        Q_PROPERTY(QVariantList whiteCapturedList READ getWhiteCapturedList NOTIFY capturedPiecesChanged)
+        Q_PROPERTY(QVariantList blackCapturedList READ getBlackCapturedList NOTIFY capturedPiecesChanged)
 
 public:
     enum ChessRoles { TypeRole = Qt::UserRole + 1, ColorRole, HighlightRole };
@@ -31,12 +33,15 @@ public:
     QString getBlackTimeText() const;
     bool getIsWhiteTurn() const;
     QVariantList getMoveHistoryList() const;
+    QVariantList getWhiteCapturedList() const;
+    QVariantList getBlackCapturedList() const;
 
 signals:
     void gameStateChanged();
     void moveHistoryChanged();
     void promotionChanged();
     void timeChanged();
+    void capturedPiecesChanged();
 
 private:
     std::unique_ptr<ChessGame> game;

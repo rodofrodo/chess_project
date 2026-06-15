@@ -48,6 +48,7 @@ void ChessBoardQmlModel::selectSquare(int index) {
     emit promotionChanged();
     emit gameStateChanged();
     emit moveHistoryChanged();
+    emit capturedPiecesChanged();
 }
 
 void ChessBoardQmlModel::promotePawn(int pieceType) {
@@ -57,6 +58,7 @@ void ChessBoardQmlModel::promotePawn(int pieceType) {
     emit promotionChanged();
     emit gameStateChanged();
     emit moveHistoryChanged();
+    emit capturedPiecesChanged();
 }
 
 QString ChessBoardQmlModel::getGameStateText() const {
@@ -93,6 +95,7 @@ void ChessBoardQmlModel::startGame(QString timeControl) {
         timer->start(50);
     }
     emit moveHistoryChanged();
+    emit capturedPiecesChanged();
 }
 
 QString ChessBoardQmlModel::getWhiteTimeText() const {
@@ -128,6 +131,40 @@ QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
         map["whiteMove"] = QString::fromStdString(record.whiteMove);
         map["blackMove"] = QString::fromStdString(record.blackMove);
         list.append(map);
+    }
+    return list;
+}
+
+QVariantList ChessBoardQmlModel::getWhiteCapturedList() const {
+    QVariantList list;
+    for (PieceType type : game->getWhiteCapturedPieces()) {
+        QString name;
+        switch (type) {
+            case PieceType::Pawn: name = "pawn"; break;
+            case PieceType::Knight: name = "knight"; break;
+            case PieceType::Bishop: name = "bishop"; break;
+            case PieceType::Rook: name = "rook"; break;
+            case PieceType::Queen: name = "queen"; break;
+            default: break;
+        }
+        if (!name.isEmpty()) list.append(name);
+    }
+    return list;
+}
+
+QVariantList ChessBoardQmlModel::getBlackCapturedList() const {
+    QVariantList list;
+    for (PieceType type : game->getBlackCapturedPieces()) {
+        QString name;
+        switch (type) {
+            case PieceType::Pawn: name = "pawn"; break;
+            case PieceType::Knight: name = "knight"; break;
+            case PieceType::Bishop: name = "bishop"; break;
+            case PieceType::Rook: name = "rook"; break;
+            case PieceType::Queen: name = "queen"; break;
+            default: break;
+        }
+        if (!name.isEmpty()) list.append(name);
     }
     return list;
 }
