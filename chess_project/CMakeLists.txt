@@ -11,6 +11,7 @@ find_package(Qt${QT_VERSION_MAJOR}
     COMPONENTS
         Quick
 )
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
 
 qt_standard_project_setup()
 
@@ -43,15 +44,22 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
         RESOURCE_PREFIX "/qt/qml/"
         QML_FILES
             main.qml
+            # pages
             pages/CreditsPage.qml
             pages/GamePage.qml
             pages/MainMenu.qml
             pages/StartPage.qml
+            # elements
+            elements/CapturedPieces.qml
             elements/ChessBoard.qml
             elements/ChessStartText.qml
             elements/GetStartedBtn.qml
             elements/MenuButton.qml
             elements/GoBackBtn.qml
+            elements/MoveHistoryPanel.qml
+            elements/PlayerTimer.qml
+            elements/TimeControlMenu.qml
+            # assets
             assets/startpage_bg.png
             assets/mainmenu_bg.png
             assets/creditspage_bg.png
@@ -62,30 +70,31 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             assets/icon.png
             # -- pawns --
             # black
-            assets/pawns/bishop_black.png
-            assets/pawns/king_black.png
-            assets/pawns/knight_black.png
-            assets/pawns/pawn_black.png
-            assets/pawns/queen_black.png
-            assets/pawns/rook_black.png
+            assets/pawns/bishop_black.svg
+            assets/pawns/king_black.svg
+            assets/pawns/knight_black.svg
+            assets/pawns/pawn_black.svg
+            assets/pawns/queen_black.svg
+            assets/pawns/rook_black.svg
             # white
-            assets/pawns/bishop_white.png
-            assets/pawns/king_white.png
-            assets/pawns/knight_white.png
-            assets/pawns/pawn_white.png
-            assets/pawns/queen_white.png
-            assets/pawns/rook_white.png
+            assets/pawns/bishop_white.svg
+            assets/pawns/king_white.svg
+            assets/pawns/knight_white.svg
+            assets/pawns/pawn_white.svg
+            assets/pawns/queen_white.svg
+            assets/pawns/rook_white.svg
     )
 endif()
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
-        WIN32_EXECUTABLE TRUE
+        WIN32_EXECUTABLE TRUE # For GUI applications on Windows, set this to TRUE. For console applications, set it to FALSE.
 )
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         Qt::Quick
+        Qt6::QuickControls2
 )
 
 if(Qt6_FOUND)

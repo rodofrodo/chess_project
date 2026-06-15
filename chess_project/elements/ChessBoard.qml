@@ -56,10 +56,10 @@ Rectangle {
                 color: {
                     if (model.isHighlighted) {
                         // The Highlight Colors
-                        return isLightSquare ? "#f4f680" : "#baca44" 
+                        return isLightSquare ? "#0077EE" : "#004E9C" 
                     } else {
                         // The Normal Board Colors (from your screenshots!)
-                        return isLightSquare ? "#ebecd0" : "#779556" 
+                        return isLightSquare ? "#FFFFCD" : "#EC94A3" 
                     }
                 }
 
@@ -68,17 +68,20 @@ Rectangle {
                 // --- ADD THE PIECE IMAGE HERE ---
                 Image {
                     id: pieceImage
-                    width: parent.width * 0.65
-                    height: parent.height * 0.65
-                    fillMode: Image.PreserveAspectFit
                     
-                    // Dynamic position layout for snapping
-                    x: clickArea.drag.active ? undefined : (parent.width - width) / 2
-                    y: clickArea.drag.active ? undefined : (parent.height - height) / 2
+                    width: implicitWidth
+                    height: implicitHeight
+                    fillMode: Image.Pad
+                    
+                    // THE TRUE BLUR FIX: Force integer pixel alignments!
+                    // This stops the engine from positioning an SVG at a half-pixel (like 12.5), 
+                    // which is what ruins the crisp vector lines.
+                    x: clickArea.drag.active ? undefined : Math.floor((parent.width - implicitWidth) / 2)
+                    y: clickArea.drag.active ? undefined : Math.floor((parent.height - implicitHeight) / 2)
                     
                     // The Magic Logic: What piece goes here?
                     property string pieceName: root.getPieceName(model.pieceType, model.pieceColor)
-                    source: pieceName !== "" ? "../assets/pawns/" + pieceName + ".png" : ""
+                    source: pieceName !== "" ? "../assets/pawns/" + pieceName + ".svg" : ""
                     visible: pieceName !== ""
                 }
 
