@@ -124,6 +124,10 @@ bool ChessBoardQmlModel::getIsWhiteTurn() const {
     return game->getCurrentTurn() == Color::White;
 }
 
+//
+int ChessBoardQmlModel::getKingInCheckIndex() const {
+    return game->getKingInCheckIndex();
+}
 QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
     QVariantList list;
     for (const auto& record : game->getMoveHistory()) {

@@ -20,6 +20,8 @@ public:
     void updateClock();
     const ChessClock& getClock() const;
 
+    int getKingInCheckIndex() const;
+
 private:
     std::vector<std::vector<std::shared_ptr<Piece>>> board;
     int selectedRow = -1;

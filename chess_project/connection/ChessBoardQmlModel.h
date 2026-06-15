@@ -12,6 +12,8 @@ class ChessBoardQmlModel : public QAbstractListModel {
         Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
         Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
         Q_PROPERTY(bool isWhiteTurn READ getIsWhiteTurn NOTIFY gameStateChanged)
+        //
+        Q_PROPERTY(int kingInCheckIndex READ getKingInCheckIndex NOTIFY gameStateChanged)
         Q_PROPERTY(QVariantList whiteCapturedList READ getWhiteCapturedList NOTIFY capturedPiecesChanged)
         Q_PROPERTY(QVariantList blackCapturedList READ getBlackCapturedList NOTIFY capturedPiecesChanged)
 
@@ -35,6 +37,9 @@ public:
     QVariantList getMoveHistoryList() const;
     QVariantList getWhiteCapturedList() const;
     QVariantList getBlackCapturedList() const;
+
+    //
+    int getKingInCheckIndex() const;
 
 signals:
     void gameStateChanged();
