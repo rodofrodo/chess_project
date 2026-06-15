@@ -214,6 +214,31 @@ void ChessGame::selectSquare(int row, int col) {
                 clock.switchTurn();
                 updateGameState();
             }
+
+            // ==========================================
+            // --- ADD THIS CHECK/MATE MODIFIER BLOCK ---
+            // ==========================================
+            if (!moveHistory.empty()) {
+                std::string modifier = "";
+                if (gameState == GameState::WhiteWins || gameState == GameState::BlackWins) {
+                    modifier = "#"; // Checkmate
+                }
+                else if (isCheck(currentTurn)) {
+                    modifier = "+"; // Check
+                }
+
+                if (!modifier.empty()) {
+                    // currentTurn was already swapped above, so if it is Black's turn now, 
+                    // it means White just made the move!
+                    if (currentTurn == Color::Black) {
+                        moveHistory.back().whiteMove += modifier;
+                    }
+                    else {
+                        moveHistory.back().blackMove += modifier;
+                    }
+                }
+            }
+            // ==========================================
         }
 
         selectedRow = -1; selectedCol = -1;
@@ -291,6 +316,31 @@ void ChessGame::promotePawn(PieceType type) {
     currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
     clock.switchTurn();
     updateGameState();
+
+    // ==========================================
+    // --- ADD THIS CHECK/MATE MODIFIER BLOCK ---
+    // ==========================================
+    if (!moveHistory.empty()) {
+        std::string modifier = "";
+        if (gameState == GameState::WhiteWins || gameState == GameState::BlackWins) {
+            modifier = "#"; // Checkmate
+        }
+        else if (isCheck(currentTurn)) {
+            modifier = "+"; // Check
+        }
+
+        if (!modifier.empty()) {
+            // currentTurn was already swapped above, so if it is Black's turn now, 
+            // it means White just made the move!
+            if (currentTurn == Color::Black) {
+                moveHistory.back().whiteMove += modifier;
+            }
+            else {
+                moveHistory.back().blackMove += modifier;
+            }
+        }
+    }
+    // ==========================================
 }
 
 void ChessGame::updateGameState() {
