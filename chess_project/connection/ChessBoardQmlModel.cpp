@@ -115,3 +115,8 @@ QString ChessBoardQmlModel::getBlackTimeText() const {
 bool ChessBoardQmlModel::getIsWhiteTurn() const {
     return game->getCurrentTurn() == Color::White;
 }
+
+//
+int ChessBoardQmlModel::getKingInCheckIndex() const {
+    return game->getKingInCheckIndex();
+}
