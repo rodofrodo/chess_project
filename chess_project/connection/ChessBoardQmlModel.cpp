@@ -1,7 +1,10 @@
 #include "ChessBoardQmlModel.h"
+#include <QVariantList>
+#include <QVariantMap>
 
 ChessBoardQmlModel::ChessBoardQmlModel(QObject* parent)
-    : QAbstractListModel(parent), game(std::make_unique<ChessGame>()) {
+    : QAbstractListModel(parent), game(std::make_unique<ChessGame>()), timer(new QTimer(this)) {
+    connect(timer, &QTimer::timeout, this, &ChessBoardQmlModel::onTick);
 }
 
 int ChessBoardQmlModel::rowCount(const QModelIndex& parent) const {
@@ -44,6 +47,8 @@ void ChessBoardQmlModel::selectSquare(int index) {
     emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
     emit promotionChanged();
     emit gameStateChanged();
+    emit moveHistoryChanged();
+    emit capturedPiecesChanged();
 }
 
 void ChessBoardQmlModel::promotePawn(int pieceType) {
@@ -52,6 +57,8 @@ void ChessBoardQmlModel::promotePawn(int pieceType) {
     emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
     emit promotionChanged();
     emit gameStateChanged();
+    emit moveHistoryChanged();
+    emit capturedPiecesChanged();
 }
 
 QString ChessBoardQmlModel::getGameStateText() const {
@@ -59,10 +66,105 @@ QString ChessBoardQmlModel::getGameStateText() const {
     case GameState::WhiteWins: return "Checkmate! White Wins";
     case GameState::BlackWins: return "Checkmate! Black Wins";
     case GameState::Stalemate: return "Stalemate";
+    case GameState::TimeOutWhite: return "Black won on time";
+    case GameState::TimeOutBlack: return "White won on time";
     default: return "";
     }
 }
 
 bool ChessBoardQmlModel::getIsPromotionActive() const {
     return game->getGameState() == GameState::Promotion;
+}
+
+void ChessBoardQmlModel::onTick() {
+    game->updateClock();
+    emit timeChanged();
+    emit gameStateChanged();
+}
+
+void ChessBoardQmlModel::startGame(QString timeControl) {
+    QStringList parts = timeControl.split("|");
+    int minutes = 0;
+    int incrementSeconds = 0;
+    if (parts.size() >= 2) {
+        minutes = parts[0].trimmed().toInt();
+        incrementSeconds = parts[1].trimmed().toInt();
+    }
+    game->startGame(minutes, incrementSeconds);
+    if (!timer->isActive()) {
+        timer->start(50);
+    }
+    emit moveHistoryChanged();
+    emit capturedPiecesChanged();
+}
+
+QString ChessBoardQmlModel::getWhiteTimeText() const {
+    if (game->getGameState() == GameState::TimeOutWhite) {
+        return "0:00";
+    }
+    long long ms = game->getClock().getWhiteTimeMs();
+    int s = ms / 1000;
+    int m = s / 60;
+    s %= 60;
+    return QString::asprintf("%d:%02d", m, s);
+}
+
+QString ChessBoardQmlModel::getBlackTimeText() const {
+    if (game->getGameState() == GameState::TimeOutBlack) {
+        return "0:00";
+    }
+    long long ms = game->getClock().getBlackTimeMs();
+    int s = ms / 1000;
+    int m = s / 60;
+    s %= 60;
+    return QString::asprintf("%d:%02d", m, s);
+}
+
+bool ChessBoardQmlModel::getIsWhiteTurn() const {
+    return game->getCurrentTurn() == Color::White;
+}
+
+QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
+    QVariantList list;
+    for (const auto& record : game->getMoveHistory()) {
+        QVariantMap map;
+        map["whiteMove"] = QString::fromStdString(record.whiteMove);
+        map["blackMove"] = QString::fromStdString(record.blackMove);
+        list.append(map);
+    }
+    return list;
+}
+
+QVariantList ChessBoardQmlModel::getWhiteCapturedList() const {
+    QVariantList list;
+    for (PieceType type : game->getWhiteCapturedPieces()) {
+        QString name;
+        switch (type) {
+            case PieceType::Pawn: name = "pawn"; break;
+            case PieceType::Knight: name = "knight"; break;
+            case PieceType::Bishop: name = "bishop"; break;
+            case PieceType::Rook: name = "rook"; break;
+            case PieceType::Queen: name = "queen"; break;
+            default: break;
+        }
+        if (!name.isEmpty()) list.append(name);
+    }
+    return list;
+}
+
+QVariantList ChessBoardQmlModel::getBlackCapturedList() const {
+    QVariantList list;
+    for (PieceType type : game->getBlackCapturedPieces()) {
+        QString name;
+        switch (type) {
+            case PieceType::Pawn: name = "pawn"; break;
+            case PieceType::Knight: name = "knight"; break;
+            case PieceType::Bishop: name = "bishop"; break;
+            case PieceType::Rook: name = "rook"; break;
+            case PieceType::Queen: name = "queen"; break;
+            default: break;
+        }
+        if (!name.isEmpty()) list.append(name);
+    }
+    return list;
 }

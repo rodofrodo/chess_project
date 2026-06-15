@@ -12,6 +12,10 @@ Rectangle {
     property string timeText: "00:00"
     property int rotationAngle: 0 // Change this to 0, 90, 180, or 270
 
+    onTimeTextChanged: {
+        timerContainer.rotationAngle += 90;
+    }
+
     //Component.onCompleted: {
         // Force a small delay to ensure the rotation is detected as a "change"
         //timerContainer.rotationAngle = 0; 
@@ -78,11 +82,5 @@ Rectangle {
         }
     }
 
-// TESTING
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            timerContainer.rotationAngle += 90;
-        }
-    }
+
 }

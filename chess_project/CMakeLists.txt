@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
     logic/Pieces.h
     logic/ChessGame.cpp
     logic/ChessGame.h
+    logic/ChessClock.cpp
+    logic/ChessClock.h
     connection/ChessBoardQmlModel.cpp
     connection/ChessBoardQmlModel.h
 )
