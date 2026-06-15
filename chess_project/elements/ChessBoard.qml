@@ -8,6 +8,8 @@ Rectangle {
     color: "white" 
     radius: 25
 
+    property int kingInCheckIndex: boardModel.kingInCheckIndex
+
     function getPieceName(type, color) {
         if (type === -1) return "";
         var types = ["pawn", "rook", "knight", "bishop", "queen", "king"];
@@ -64,6 +66,16 @@ Rectangle {
                 }
 
                 z: clickArea.drag.active ? 1 : 0 // Ensure the dragged piece is always on top
+
+                // ==========================================
+                // --- ADD THIS RED CHECK OVERLAY HERE ---
+                // ==========================================
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#900000" 
+                    // Only visible if this exact square is the one in check!
+                    visible: index === root.kingInCheckIndex 
+                }
 
                 // --- ADD THE PIECE IMAGE HERE ---
                 Image {
