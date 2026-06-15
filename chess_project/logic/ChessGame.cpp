@@ -257,3 +257,29 @@ void ChessGame::updateGameState() {
         else gameState = GameState::Stalemate;
     }
 }
+
+//
+int ChessGame::getKingInCheckIndex() const {
+    // 1. Check if White is in check
+    if (isCheck(Color::White)) {
+        for (int r = 0; r < 8; ++r) {
+            for (int c = 0; c < 8; ++c) {
+                if (board[r][c] && board[r][c]->getType() == PieceType::King && board[r][c]->getColor() == Color::White) {
+                    return r * 8 + c; // Convert row/col to 0-63 index
+                }
+            }
+        }
+    }
+    // 2. Check if Black is in check
+    else if (isCheck(Color::Black)) {
+        for (int r = 0; r < 8; ++r) {
+            for (int c = 0; c < 8; ++c) {
+                if (board[r][c] && board[r][c]->getType() == PieceType::King && board[r][c]->getColor() == Color::Black) {
+                    return r * 8 + c;
+                }
+            }
+        }
+    }
+    // 3. Nobody is in check
+    return -1;
+}
