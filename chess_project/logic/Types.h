@@ -10,3 +10,10 @@ struct Position {
     bool operator==(const Position& other) const { return row == other.row && col == other.col; }
     bool operator!=(const Position& other) const { return !(*this == other); }
 };
+
+#include <string>
+
+struct MoveRecord {
+    std::string whiteMove;
+    std::string blackMove;
+};

@@ -1,4 +1,6 @@
 #include "ChessBoardQmlModel.h"
+#include <QVariantList>
+#include <QVariantMap>
 
 ChessBoardQmlModel::ChessBoardQmlModel(QObject* parent)
     : QAbstractListModel(parent), game(std::make_unique<ChessGame>()), timer(new QTimer(this)) {
@@ -45,6 +47,7 @@ void ChessBoardQmlModel::selectSquare(int index) {
     emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
     emit promotionChanged();
     emit gameStateChanged();
+    emit moveHistoryChanged();
 }
 
 void ChessBoardQmlModel::promotePawn(int pieceType) {
@@ -53,6 +56,7 @@ void ChessBoardQmlModel::promotePawn(int pieceType) {
     emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
     emit promotionChanged();
     emit gameStateChanged();
+    emit moveHistoryChanged();
 }
 
 QString ChessBoardQmlModel::getGameStateText() const {
@@ -88,6 +92,7 @@ void ChessBoardQmlModel::startGame(QString timeControl) {
     if (!timer->isActive()) {
         timer->start(50);
     }
+    emit moveHistoryChanged();
 }
 
 QString ChessBoardQmlModel::getWhiteTimeText() const {
@@ -114,4 +119,15 @@ QString ChessBoardQmlModel::getBlackTimeText() const {
 
 bool ChessBoardQmlModel::getIsWhiteTurn() const {
     return game->getCurrentTurn() == Color::White;
+}
+
+QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
+    QVariantList list;
+    for (const auto& record : game->getMoveHistory()) {
+        QVariantMap map;
+        map["whiteMove"] = QString::fromStdString(record.whiteMove);
+        map["blackMove"] = QString::fromStdString(record.blackMove);
+        list.append(map);
+    }
+    return list;
 }

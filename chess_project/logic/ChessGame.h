@@ -14,6 +14,7 @@ public:
     Color getCurrentTurn() const { return currentTurn; }
     void promotePawn(PieceType type);
     void startGame(int totalMinutes, int incrementSeconds);
+    const std::vector<MoveRecord>& getMoveHistory() const;
     void updateClock();
     const ChessClock& getClock() const;
 
@@ -27,8 +28,10 @@ private:
     Position enPassantTarget = { -1, -1 };
     Position pendingPromotion = { -1, -1 };
     ChessClock clock;
+    std::vector<MoveRecord> moveHistory;
 
     void setupBoard();
+    std::string toAlgebraic(std::shared_ptr<Piece> piece, Position from, Position to, bool isCapture, bool isCastling);
     bool isCheck(Color kingColor) const;
     bool isSquareAttacked(Position pos, Color attackerColor) const;
     void updateGameState();

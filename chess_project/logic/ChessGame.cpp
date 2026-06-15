@@ -7,6 +7,10 @@ ChessGame::ChessGame() {
     gameState = GameState::WaitingForStart;
 }
 
+const std::vector<MoveRecord>& ChessGame::getMoveHistory() const {
+    return moveHistory;
+}
+
 std::shared_ptr<Piece> ChessGame::getPieceAt(int row, int col) const {
     if (row >= 0 && row < 8 && col >= 0 && col < 8) return board[row][col];
     return nullptr;
@@ -29,6 +33,7 @@ void ChessGame::startGame(int totalMinutes, int incrementSeconds) {
     selectedRow = -1;
     selectedCol = -1;
     highlightedMoves.clear();
+    moveHistory.clear();
     gameState = GameState::Active;
     clock.start(totalMinutes, incrementSeconds);
 }
@@ -165,8 +170,20 @@ void ChessGame::selectSquare(int row, int col) {
         for (auto m : highlightedMoves) if (m.row == row && m.col == col) isValid = true;
 
         if (isValid) {
+            auto piece = board[selectedRow][selectedCol];
+            bool isCapture = (board[row][col] != nullptr) || (piece->getType() == PieceType::Pawn && row == enPassantTarget.row && col == enPassantTarget.col);
+            bool isCastling = (piece->getType() == PieceType::King && std::abs(selectedCol - col) == 2);
+            Color movingColor = currentTurn;
+            std::string moveStr = toAlgebraic(piece, {selectedRow, selectedCol}, {row, col}, isCapture, isCastling);
+
             movePiece(selectedRow, selectedCol, row, col);
             if (gameState != GameState::Promotion) {
+                if (movingColor == Color::White) {
+                    moveHistory.push_back({moveStr, ""});
+                } else {
+                    if (!moveHistory.empty()) moveHistory.back().blackMove = moveStr;
+                }
+                
                 currentTurn = (currentTurn == Color::White) ? Color::Black : Color::White;
                 clock.switchTurn();
                 updateGameState();
@@ -230,6 +247,18 @@ void ChessGame::promotePawn(PieceType type) {
     else if (type == PieceType::Bishop) board[pendingPromotion.row][pendingPromotion.col] = std::make_shared<Bishop>(c, pendingPromotion);
     else if (type == PieceType::Knight) board[pendingPromotion.row][pendingPromotion.col] = std::make_shared<Knight>(c, pendingPromotion);
 
+    std::string promoChar = "Q";
+    if (type == PieceType::Rook) promoChar = "R";
+    else if (type == PieceType::Bishop) promoChar = "B";
+    else if (type == PieceType::Knight) promoChar = "N";
+    
+    std::string moveStr = std::string(1, 'a' + pendingPromotion.col) + std::to_string(8 - pendingPromotion.row) + "=" + promoChar;
+    if (currentTurn == Color::White) {
+        moveHistory.push_back({moveStr, ""});
+    } else {
+        if (!moveHistory.empty()) moveHistory.back().blackMove = moveStr;
+    }
+
     pendingPromotion = { -1, -1 };
     gameState = GameState::Active;
 
@@ -256,4 +285,34 @@ void ChessGame::updateGameState() {
         if (isCheck(currentTurn)) gameState = (currentTurn == Color::White) ? GameState::BlackWins : GameState::WhiteWins;
         else gameState = GameState::Stalemate;
     }
+}
+
+std::string ChessGame::toAlgebraic(std::shared_ptr<Piece> piece, Position from, Position to, bool isCapture, bool isCastling) {
+    if (isCastling) {
+        if (to.col == 6) return "O-O";
+        if (to.col == 2) return "O-O-O";
+    }
+    
+    std::string dest = std::string(1, 'a' + to.col) + std::to_string(8 - to.row);
+    if (piece->getType() == PieceType::Pawn) {
+        if (isCapture) {
+            return std::string(1, 'a' + from.col) + "x" + dest;
+        }
+        return dest;
+    }
+    
+    std::string prefix = "";
+    switch (piece->getType()) {
+        case PieceType::Knight: prefix = "N"; break;
+        case PieceType::Bishop: prefix = "B"; break;
+        case PieceType::Rook: prefix = "R"; break;
+        case PieceType::Queen: prefix = "Q"; break;
+        case PieceType::King: prefix = "K"; break;
+        default: break;
+    }
+    
+    if (isCapture) {
+        return prefix + "x" + dest;
+    }
+    return prefix + dest;
 }
