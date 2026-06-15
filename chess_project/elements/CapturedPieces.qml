@@ -1,35 +1,43 @@
 import QtQuick
 
-Column {
+Grid {
     id: capturedRoot
-    width: 30
     
-    // Tightly pack the pieces. You can even use a negative number like -5 
-    // to make them overlap slightly if the column gets too long!
-    spacing: -8 
+    // We remove the fixed `width: 30` here! 
+    // The Grid needs to be able to dynamically expand its width when the 2nd column spawns.
+    
+    spacing: 5
 
-    // The color of the pieces in this specific column ("white" or "black")
+    // ==========================================
+    // THE WRAP LOGIC
+    // ==========================================
+    // Fill vertically first (like a column), rather than horizontally
+    flow: Grid.TopToBottom 
+    
+    // Stop at 8 items, then wrap to a new column
+    rows: 8 
+    
+    // Force the first column to stay on the right (closest to the board),
+    // and make the second column spawn to the LEFT!
+    layoutDirection: Qt.RightToLeft 
+    // ==========================================
+
     property string pieceColor: "white"
-
-    // A list of pieces to display. 
-    // Later, C++ will provide this list dynamically!
     property var capturedList: []
 
-    Repeater {
-        model: capturedRoot.capturedList
+   Repeater {
+         model: capturedRoot.capturedList
         
-        delegate: Image {
-            width: 25
-            height: 25
-            fillMode: Image.PreserveAspectFit
+         delegate: Image {
+             width: 36
+             height: 36
+             fillMode: Image.PreserveAspectFit
             
-            // Dynamically load the image based on the array data and color property
-            source: "../assets/pawns/" + modelData + "_" + capturedRoot.pieceColor + ".svg"
+             source: "../assets/pawns/" + modelData + "_" + capturedRoot.pieceColor + ".svg"
             
-            // A subtle fade-in effect when a new piece gets captured
-            opacity: 0.0
-            Component.onCompleted: opacity = 1.0
-            Behavior on opacity { NumberAnimation { duration: 300 } }
-        }
+             opacity: 0.0
+             Component.onCompleted: opacity = 1.0
+             Behavior on opacity { NumberAnimation { duration: 300 } }
+         }
     }
 }
