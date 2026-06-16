@@ -108,12 +108,26 @@ void ChessBoardQmlModel::startGame(QString timeControl) {
         minutes = parts[0].trimmed().toInt();
         incrementSeconds = parts[1].trimmed().toInt();
     }
+
+    // 1. Reset the backend logic
     game->startGame(minutes, incrementSeconds);
+
+    // 2. Wake the timer back up if it was stopped by a Checkmate
     if (!timer->isActive()) {
         timer->start(50);
     }
+
+    // 3. TELL QML TO UPDATE EVERYTHING
     emit moveHistoryChanged();
     emit capturedPiecesChanged();
+
+    // --- ADD THESE THREE LINES ---
+    // Force all 64 squares to redraw the pieces in their starting spots
+    emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
+    // Clears the Game Over box and resets the Turn Indicator
+    emit gameStateChanged();
+    // Resets the visual clocks back to 10:00 (or whatever time you set)
+    emit timeChanged();
 }
 
 QString ChessBoardQmlModel::getWhiteTimeText() const {
@@ -189,4 +203,14 @@ QVariantList ChessBoardQmlModel::getBlackCapturedList() const {
         if (!name.isEmpty()) list.append(name);
     }
     return list;
+}
+
+void ChessBoardQmlModel::stopGame() {
+    // 1. Kill the physical clock
+    if (timer->isActive()) {
+        timer->stop();
+    }
+    // 2. You don't necessarily need to clear the board here because 
+    // the next time they click "Play" on the menu, your startGame() 
+    // method will automatically wipe everything anyway!
 }

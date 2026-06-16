@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void selectSquare(int index);
     Q_INVOKABLE void promotePawn(int pieceType);
     Q_INVOKABLE void startGame(QString timeControl);
+    Q_INVOKABLE void stopGame();
 
     QString getGameStateText() const;
     bool getIsPromotionActive() const;
