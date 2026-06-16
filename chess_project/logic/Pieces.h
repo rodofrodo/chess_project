@@ -1,13 +1,9 @@
 #pragma once
 #include "Piece.h"
 
-void addSlidingMoves(std::vector<Position>& moves, const Position& pos, Color color,
-    const std::vector<std::vector<std::shared_ptr<Piece>>>& board,
-    const std::vector<std::pair<int, int>>& directions);
+void addSlidingMoves(std::vector<Position>& moves, const Position& pos, Color color, const std::vector<std::vector<std::shared_ptr<Piece>>>& board, const std::vector<std::pair<int, int>>& directions);
 
-void addStepMoves(std::vector<Position>& moves, const Position& pos, Color color,
-    const std::vector<std::vector<std::shared_ptr<Piece>>>& board,
-    const std::vector<std::pair<int, int>>& steps);
+void addStepMoves(std::vector<Position>& moves, const Position& pos, Color color, const std::vector<std::vector<std::shared_ptr<Piece>>>& board, const std::vector<std::pair<int, int>>& steps);
 
 class Pawn : public Piece {
 public:

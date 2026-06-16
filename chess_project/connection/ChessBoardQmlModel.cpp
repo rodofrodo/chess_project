@@ -2,20 +2,19 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-ChessBoardQmlModel::ChessBoardQmlModel(QObject* parent)
-    : QAbstractListModel(parent), game(std::make_unique<ChessGame>()), timer(new QTimer(this)) {
+ChessBoardQmlModel::ChessBoardQmlModel(QObject* parent) : QAbstractListModel(parent), game(std::make_unique<ChessGame>()), timer(new QTimer(this)) {
     connect(timer, &QTimer::timeout, this, &ChessBoardQmlModel::onTick);
 }
-
+// wielkość naszego modelu szachownicy
 int ChessBoardQmlModel::rowCount(const QModelIndex& parent) const {
     if (parent.isValid()) return 0;
     return 64;
 }
-
+// metoda odpowiadająca za przekazywanie danych o figurach do interfejsu
 QVariant ChessBoardQmlModel::data(const QModelIndex& index, int role) const {
     if (!index.isValid()) return QVariant();
 
-    int r = index.row() / 8;
+    int r = index.row() / 8; // przeliczamy indeks (od 0 do 63) na rząd i kolumnę
     int c = index.row() % 8;
 
     if (role == TypeRole) {
@@ -30,7 +29,7 @@ QVariant ChessBoardQmlModel::data(const QModelIndex& index, int role) const {
 
     return QVariant();
 }
-
+// tłumaczymy enumy na nazwy dla qml
 QHash<int, QByteArray> ChessBoardQmlModel::roleNames() const {
     return {
         {TypeRole, "pieceType"},
@@ -38,7 +37,7 @@ QHash<int, QByteArray> ChessBoardQmlModel::roleNames() const {
         {HighlightRole, "isHighlighted"}
     };
 }
-
+// metoda, która odpowiada na kliknięcie pola na sachwonicy (np sprawdzenie dozwolonych ruchów)
 void ChessBoardQmlModel::selectSquare(int index) {
     int r = index / 8;
     int c = index % 8;
@@ -50,7 +49,7 @@ void ChessBoardQmlModel::selectSquare(int index) {
     emit moveHistoryChanged();
     emit capturedPiecesChanged();
 }
-
+// uruchamia funkcję do zamiany pionka po dojściu do końca planszy
 void ChessBoardQmlModel::promotePawn(int pieceType) {
     game->promotePawn(static_cast<PieceType>(pieceType));
 
@@ -60,7 +59,7 @@ void ChessBoardQmlModel::promotePawn(int pieceType) {
     emit moveHistoryChanged();
     emit capturedPiecesChanged();
 }
-
+// przygotowuje tekst do wyświetlenia na ekranie po zakończeniu
 QString ChessBoardQmlModel::getGameStateText() const {
     switch (game->getGameState()) {
     case GameState::WhiteWins: return "Checkmate! White Wins";
@@ -71,35 +70,31 @@ QString ChessBoardQmlModel::getGameStateText() const {
     default: return "";
     }
 }
-
+// sprawdza, czy w tym momencie gracz wybiera figurę do promocji (by pokazać mu okienko)
 bool ChessBoardQmlModel::getIsPromotionActive() const {
     return game->getGameState() == GameState::Promotion;
 }
-
 void ChessBoardQmlModel::onTick() {
-    // 1. Check if the game has ended
     auto state = game->getGameState();
+    
+    // zatrzymanie zegaru pod wrunkami:
     if (state == GameState::WhiteWins ||
         state == GameState::BlackWins ||
         state == GameState::Stalemate ||
         state == GameState::TimeOutWhite ||
         state == GameState::TimeOutBlack) {
 
-        // Kill the UI timer. This permanently freezes the clock on the screen!
         if (timer->isActive()) {
             timer->stop();
-            // Emit one final time to ensure the UI shows the exact millisecond it stopped
             emit timeChanged();
         }
         return;
     }
-
-    // 2. If the game is still active, update normally
     game->updateClock();
     emit timeChanged();
     emit gameStateChanged();
 }
-
+// zaczyna nową grę, tnie tekst z ustawieniami czasu (np. "10|5") i ustawia zegar
 void ChessBoardQmlModel::startGame(QString timeControl) {
     QStringList parts = timeControl.split("|");
     int minutes = 0;
@@ -108,28 +103,18 @@ void ChessBoardQmlModel::startGame(QString timeControl) {
         minutes = parts[0].trimmed().toInt();
         incrementSeconds = parts[1].trimmed().toInt();
     }
-
-    // 1. Reset the backend logic
     game->startGame(minutes, incrementSeconds);
 
-    // 2. Wake the timer back up if it was stopped by a Checkmate
     if (!timer->isActive()) {
         timer->start(50);
     }
-
-    // 3. TELL QML TO UPDATE EVERYTHING
     emit moveHistoryChanged();
     emit capturedPiecesChanged();
-
-    // --- ADD THESE THREE LINES ---
-    // Force all 64 squares to redraw the pieces in their starting spots
     emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
-    // Clears the Game Over box and resets the Turn Indicator
     emit gameStateChanged();
-    // Resets the visual clocks back to 10:00 (or whatever time you set)
     emit timeChanged();
 }
-
+// zmienia czas (milisekundy) na tekst do wyświetlenia
 QString ChessBoardQmlModel::getWhiteTimeText() const {
     if (game->getGameState() == GameState::TimeOutWhite) {
         return "0:00";
@@ -151,15 +136,15 @@ QString ChessBoardQmlModel::getBlackTimeText() const {
     s %= 60;
     return QString::asprintf("%d:%02d", m, s);
 }
-
+// sprawdza czy białem mają ruch
 bool ChessBoardQmlModel::getIsWhiteTurn() const {
     return game->getCurrentTurn() == Color::White;
 }
-
-//
+// sprawdza gdzie stoi król w szachu, by qml mógł podświetlić to pole na czerwono
 int ChessBoardQmlModel::getKingInCheckIndex() const {
     return game->getKingInCheckIndex();
 }
+// tworzy historię ruchów jako lista, którą qml rysuje z boku
 QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
     QVariantList list;
     for (const auto& record : game->getMoveHistory()) {
@@ -170,7 +155,7 @@ QVariantList ChessBoardQmlModel::getMoveHistoryList() const {
     }
     return list;
 }
-
+// tworzy liste zbitych figur do wyświetlenia
 QVariantList ChessBoardQmlModel::getWhiteCapturedList() const {
     QVariantList list;
     for (PieceType type : game->getWhiteCapturedPieces()) {
@@ -204,13 +189,9 @@ QVariantList ChessBoardQmlModel::getBlackCapturedList() const {
     }
     return list;
 }
-
+// zakończenie gry
 void ChessBoardQmlModel::stopGame() {
-    // 1. Kill the physical clock
     if (timer->isActive()) {
         timer->stop();
     }
-    // 2. You don't necessarily need to clear the board here because 
-    // the next time they click "Play" on the menu, your startGame() 
-    // method will automatically wipe everything anyway!
 }

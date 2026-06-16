@@ -4,21 +4,24 @@
 #include <memory>
 #include "../logic/ChessGame.h"
 
+// klasa działa jak tłumacz między logiką szachów a interfejsem użytkownika
 class ChessBoardQmlModel : public QAbstractListModel {
     Q_OBJECT
-        Q_PROPERTY(QString gameStateText READ getGameStateText NOTIFY gameStateChanged)
-        Q_PROPERTY(QVariantList moveHistoryList READ getMoveHistoryList NOTIFY moveHistoryChanged)
-        Q_PROPERTY(bool isPromotionActive READ getIsPromotionActive NOTIFY promotionChanged)
-        Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
-        Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
-        Q_PROPERTY(bool isWhiteTurn READ getIsWhiteTurn NOTIFY gameStateChanged)
-        //
-        Q_PROPERTY(int kingInCheckIndex READ getKingInCheckIndex NOTIFY gameStateChanged)
-        Q_PROPERTY(QVariantList whiteCapturedList READ getWhiteCapturedList NOTIFY capturedPiecesChanged)
-        Q_PROPERTY(QVariantList blackCapturedList READ getBlackCapturedList NOTIFY capturedPiecesChanged)
+    
+    Q_PROPERTY(QString gameStateText READ getGameStateText NOTIFY gameStateChanged)
+    Q_PROPERTY(QVariantList moveHistoryList READ getMoveHistoryList NOTIFY moveHistoryChanged)
+    Q_PROPERTY(bool isPromotionActive READ getIsPromotionActive NOTIFY promotionChanged)
+    Q_PROPERTY(QString whiteTimeText READ getWhiteTimeText NOTIFY timeChanged)
+    Q_PROPERTY(QString blackTimeText READ getBlackTimeText NOTIFY timeChanged)
+    Q_PROPERTY(bool isWhiteTurn READ getIsWhiteTurn NOTIFY gameStateChanged)
+    Q_PROPERTY(int kingInCheckIndex READ getKingInCheckIndex NOTIFY gameStateChanged)
+    Q_PROPERTY(QVariantList whiteCapturedList READ getWhiteCapturedList NOTIFY capturedPiecesChanged)
+    Q_PROPERTY(QVariantList blackCapturedList READ getBlackCapturedList NOTIFY capturedPiecesChanged)
 
 public:
+    // definiujemy specjalne role
     enum ChessRoles { TypeRole = Qt::UserRole + 1, ColorRole, HighlightRole };
+    
     explicit ChessBoardQmlModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -38,10 +41,8 @@ public:
     QVariantList getMoveHistoryList() const;
     QVariantList getWhiteCapturedList() const;
     QVariantList getBlackCapturedList() const;
-
-    //
     int getKingInCheckIndex() const;
-
+	// sygnału odpowiadające za zmiane
 signals:
     void gameStateChanged();
     void moveHistoryChanged();
@@ -50,8 +51,7 @@ signals:
     void capturedPiecesChanged();
 
 private:
-    std::unique_ptr<ChessGame> game;
-    QTimer* timer;
-
+	std::unique_ptr<ChessGame> game; //wskaźnik do zasad gry
+    QTimer* timer; // timer do zegara
     void onTick();
 };

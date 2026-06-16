@@ -13,7 +13,6 @@ Item {
         source: "../assets/product-sans-bold.ttf" 
     }
 
-    // --- 1. MAIN CENTER: White (Always Visible) ---
     Text {
         id: mainText
         text: root.text
@@ -25,11 +24,6 @@ Item {
         anchors.centerIn: parent
     }
 
-    // ==========================================
-    // LEFT GLITCH (Fires at 1.0 seconds)
-    // ==========================================
-
-    // FAR LEFT: Heavy Blue
     Text {
         id: blueText
         text: root.text
@@ -46,7 +40,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 500 } // Wait 1 second
+            PauseAnimation { duration: 500 }
             
             PropertyAction { target: blueText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: blueText; property: "anchors.horizontalCenterOffset"; to: -10; duration: 40 }
@@ -56,11 +50,10 @@ Item {
             PropertyAction { target: blueText; property: "opacity"; value: 0.0 }
             PropertyAction { target: blueText; property: "anchors.horizontalCenterOffset"; value: 0 }
             
-            PauseAnimation { duration: 1850 } // Wait the remainder of the 4000ms loop
+            PauseAnimation { duration: 1850 }
         }
     }
 
-    // INNER LEFT: Light Cyan
     Text {
         id: cyanText
         text: root.text
@@ -77,7 +70,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 520 } // Offset by 20ms so it tears slightly after blue
+            PauseAnimation { duration: 520 }
             
             PropertyAction { target: cyanText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: cyanText; property: "anchors.horizontalCenterOffset"; to: -6; duration: 30 }
@@ -91,11 +84,6 @@ Item {
         }
     }
 
-    // ==========================================
-    // RIGHT GLITCH (Fires at 3.0 seconds)
-    // ==========================================
-
-    // INNER RIGHT: Light Yellow
     Text {
         id: yellowText
         text: root.text
@@ -112,7 +100,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 520 } // Wait 3 seconds
+            PauseAnimation { duration: 520 }
             
             PropertyAction { target: yellowText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: yellowText; property: "anchors.horizontalCenterOffset"; to: 6; duration: 40 }
@@ -122,11 +110,10 @@ Item {
             PropertyAction { target: yellowText; property: "opacity"; value: 0.0 }
             PropertyAction { target: yellowText; property: "anchors.horizontalCenterOffset"; value: 0 }
             
-            PauseAnimation { duration: 1850 } // Wait the remainder of the 4000ms loop
+            PauseAnimation { duration: 1850 }
         }
     }
 
-    // FAR RIGHT: Heavy Red
     Text {
         id: redText
         text: root.text
@@ -143,7 +130,7 @@ Item {
             loops: Animation.Infinite
             running: true
             
-            PauseAnimation { duration: 500 } // Offset by 20ms
+            PauseAnimation { duration: 500 }
             
             PropertyAction { target: redText; property: "opacity"; value: 1.0 }
             NumberAnimation { target: redText; property: "anchors.horizontalCenterOffset"; to: 10; duration: 30 }
