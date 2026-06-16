@@ -10,6 +10,8 @@ Rectangle {
 
     property int kingInCheckIndex: boardModel.kingInCheckIndex
 
+    signal returnToMenu()
+
     function getPieceName(type, color) {
         if (type === -1) return "";
         var types = ["pawn", "rook", "knight", "bishop", "queen", "king"];
@@ -285,7 +287,7 @@ Rectangle {
             id: gameOverBox
             anchors.centerIn: parent
             width: 320
-            height: 180
+            height: 240
             radius: 12
             color: {
                 if (gameOverOverlay.isWhiteWin) return "#FFFFFF";
@@ -332,19 +334,17 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                // 4.
-                /*
                 Rectangle {
                     width: 160
                     height: 40
                     radius: 20
-                    // Match the theme of the winner's box
+
                     color: gameOverOverlay.isBlackWin ? "#333333" : "#F0F0F0"
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
                         text: "Play Again"
-                        font.family: productSansBold.name // productSansBold.name
+                        font.family: productSansBold.name
                         font.pixelSize: 16
                         font.bold: true
                         color: gameOverOverlay.isBlackWin ? "white" : "black"
@@ -355,18 +355,16 @@ Rectangle {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         
-                        // Subtle hover effect
                         hoverEnabled: true
                         onEntered: parent.opacity = 0.8
                         onExited: parent.opacity = 1.0
 
                         onClicked: {
-                            // Instantly resets the entire game! 
-                            // (Change "10|0" to whatever time control they are currently playing)
-                            boardModel.startGame("10|0");
+                            boardModel.stopGame();
+                            root.returnToMenu();
                         }
                     }
-                }*/
+                }
             }
         }
         ParallelAnimation {

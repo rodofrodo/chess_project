@@ -190,8 +190,17 @@ QVariantList ChessBoardQmlModel::getBlackCapturedList() const {
     return list;
 }
 // zakończenie gry
-void ChessBoardQmlModel::stopGame() {
-    if (timer->isActive()) {
+void ChessBoardQmlModel::stopGame()
+{
+    if (timer->isActive())
         timer->stop();
-    }
+    game->startGame(0, 0);
+
+    game->setGameState(GameState::WaitingForStart);
+
+    emit dataChanged(createIndex(0, 0), createIndex(63, 0), { TypeRole, ColorRole, HighlightRole });
+    emit moveHistoryChanged();
+    emit capturedPiecesChanged();
+    emit gameStateChanged();
+    emit timeChanged();
 }

@@ -25,6 +25,11 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 220
+
+        onReturnToMenu: {
+            gamepage.StackView.view.pop(); 
+            gamepage.StackView.view.push("GamePage.qml");
+        }
     }
 
     PlayerTimer {
@@ -75,6 +80,7 @@ Page {
 
         MoveHistoryPanel {
             id: historyPanel
+            visible: rightPanelStack.currentIndex == 1
         }
     }
 
@@ -100,83 +106,55 @@ Page {
         capturedList: boardModel.whiteCapturedList
     }
 
-    // ABORT / RESTART BUTTON
-    /*
-    Rectangle {
-        id: restartButton
-        width: historyPanel.width
+    // RETURN TO MENU BUTTON
+    Item {
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 45
+    
+        anchors.left: board.right 
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+    
         height: 50
-        radius: 15
-        color: "#161616" // Matches your dark history panel background
-        
-        // Anchor it right below your history panel!
-        anchors.top: historyPanel.bottom
-        anchors.topMargin: 15
-        anchors.left: historyPanel.left
+        visible: rightPanelStack.currentIndex == 1
 
-        Text {
-            text: "Restart Game"
-            color: "#FF5555" // A nice warning red
-            font.family: productSansBold.name
-            font.pixelSize: 18
-            font.bold: true
+        Rectangle {
+            id: menuButton
+            width: 200
+            height: 50
+
             anchors.centerIn: parent
-        }
 
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            
-            hoverEnabled: true
-            onEntered: restartButton.color = "#262626"
-            onExited: restartButton.color = "#161616"
+            color: "white"
+            radius: height / 2
 
-            onClicked: {
-                // Wipes the board and starts fresh instantly
-                boardModel.startGame("10|0");
+            scale: mouseArea.pressed ? 0.95 : 1.0
+            opacity: mouseArea.containsMouse ? 0.8 : 1.0
+    
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+
+            Text {
+                text: "Main Menu"
+                color: "black"
+                font.family: productSansBold.name
+                font.pixelSize: 24
+                font.bold: true
+                anchors.centerIn: parent
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+
+                onClicked: {
+                    boardModel.stopGame();
+                    gamepage.StackView.view.pop();
+                }
             }
         }
     }
-
-    // RETURN TO MENU BUTTON
-    Rectangle {
-        id: menuButton
-        width: historyPanel.width
-        height: 50
-        radius: 15
-        color: "#161616" 
-        
-        // Example: Anchoring it right below the restart button
-        anchors.top: restartButton.bottom
-        anchors.topMargin: 10
-        anchors.left: historyPanel.left
-
-        Text {
-            text: "Main Menu"
-            color: "#FFFFFF" 
-            font.family: productSansBold.name // Or "Arial"
-            font.pixelSize: 18
-            font.bold: true
-            anchors.centerIn: parent
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            
-            hoverEnabled: true
-            onEntered: menuButton.color = "#262626"
-            onExited: menuButton.color = "#161616"
-
-            onClicked: {
-                // 1. Tell C++ to kill the game and timers immediately
-                boardModel.stopGame();
-                
-                // 2. Tell the StackView to destroy this GamePage and go back!
-                // (Assuming your StackView id is 'stackView' or similar)
-                // If your StackView doesn't have an ID, you can use 'StackView.view'
-                gamepage.StackView.view.pop();
-            }
-        }
-    }*/
 }

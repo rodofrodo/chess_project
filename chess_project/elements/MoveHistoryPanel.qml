@@ -47,6 +47,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.bottomMargin: 80
         color: "#161616"
         radius: 15
 
