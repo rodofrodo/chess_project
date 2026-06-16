@@ -17,6 +17,16 @@ Rectangle {
         return types[type] + "_" + colors[color];
     }
 
+    FontLoader {
+        id: productSansBold
+        source: "../assets/product-sans-bold.ttf"
+    }
+
+    FontLoader {
+        id: productSansRegular
+        source: "../assets/product-sans-regular.ttf"
+    }
+
     Rectangle {
         anchors.centerIn: parent
         
@@ -388,7 +398,7 @@ Rectangle {
                         return "Stalemate";
                     }
                     color: gameOverOverlay.isBlackWin ? "white" : "black"
-                    font.family: "Arial" // Replace with productSansBold.name if available
+                    font.family: productSansBold.name // Replace with productSansBold.name if available
                     font.pixelSize: 32
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -401,7 +411,7 @@ Rectangle {
                         return "1/2 - 1/2";
                     }
                     color: gameOverOverlay.isBlackWin ? "white" : "black"
-                    font.family: "Arial" // productSansBold.name
+                    font.family: productSansBold.name // productSansBold.name
                     font.pixelSize: 28
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -410,7 +420,7 @@ Rectangle {
                 Text {
                     text: gameOverOverlay.outcome
                     color: gameOverOverlay.isBlackWin ? "#AAAAAA" : "#666666"
-                    font.family: "Arial"
+                    font.family: productSansRegular.name
                     font.pixelSize: 14
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
