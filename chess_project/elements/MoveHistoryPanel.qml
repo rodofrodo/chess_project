@@ -68,6 +68,14 @@ Item {
             spacing: 4
             clip: true // VERY IMPORTANT: Prevents items from scrolling outside the rounded box
 
+            // ==========================================
+            // --- ADD THIS AUTO-SCROLL LOGIC HERE ---
+            // ==========================================
+            onCountChanged: {
+                // Whenever a new move is added to the count, instantly snap to the bottom
+                moveList.positionViewAtEnd()
+            }
+
             model: boardModel.moveHistoryList
 
             delegate: Rectangle {
