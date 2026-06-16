@@ -21,6 +21,7 @@ public:
     void updateClock();
     const ChessClock& getClock() const;
     int getKingInCheckIndex() const;
+    void setGameState(GameState state) { gameState = state; }
 
 private:
     std::vector<std::vector<std::shared_ptr<Piece>>> board;
