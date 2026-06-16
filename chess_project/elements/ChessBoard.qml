@@ -424,6 +424,42 @@ Rectangle {
                     font.pixelSize: 14
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
+
+                // 4.
+                /*
+                Rectangle {
+                    width: 160
+                    height: 40
+                    radius: 20
+                    // Match the theme of the winner's box
+                    color: gameOverOverlay.isBlackWin ? "#333333" : "#F0F0F0"
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        text: "Play Again"
+                        font.family: productSansBold.name // productSansBold.name
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: gameOverOverlay.isBlackWin ? "white" : "black"
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        
+                        // Subtle hover effect
+                        hoverEnabled: true
+                        onEntered: parent.opacity = 0.8
+                        onExited: parent.opacity = 1.0
+
+                        onClicked: {
+                            // Instantly resets the entire game! 
+                            // (Change "10|0" to whatever time control they are currently playing)
+                            boardModel.startGame("10|0");
+                        }
+                    }
+                }*/
             }
         }
 
