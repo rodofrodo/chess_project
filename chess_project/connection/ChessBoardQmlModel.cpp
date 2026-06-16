@@ -77,6 +77,24 @@ bool ChessBoardQmlModel::getIsPromotionActive() const {
 }
 
 void ChessBoardQmlModel::onTick() {
+    // 1. Check if the game has ended
+    auto state = game->getGameState();
+    if (state == GameState::WhiteWins ||
+        state == GameState::BlackWins ||
+        state == GameState::Stalemate ||
+        state == GameState::TimeOutWhite ||
+        state == GameState::TimeOutBlack) {
+
+        // Kill the UI timer. This permanently freezes the clock on the screen!
+        if (timer->isActive()) {
+            timer->stop();
+            // Emit one final time to ensure the UI shows the exact millisecond it stopped
+            emit timeChanged();
+        }
+        return;
+    }
+
+    // 2. If the game is still active, update normally
     game->updateClock();
     emit timeChanged();
     emit gameStateChanged();
