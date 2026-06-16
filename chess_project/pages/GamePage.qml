@@ -103,31 +103,36 @@ Page {
     // RETURN TO MENU BUTTON
     Rectangle {
         id: menuButton
-        width: historyPanel.width
+        width: 200
         height: 50
-        radius: 15
-        color: "#161616" 
-        
+
         anchors.top: restartButton.bottom
         anchors.topMargin: 10
         anchors.left: historyPanel.left
 
+        color: "white"
+        radius: height / 2
+
+        scale: mouseArea.pressed ? 0.95 : 1.0
+        opacity: mouseArea.containsMouse ? 0.8 : 1.0
+    
+        Behavior on scale { NumberAnimation { duration: 100 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+
         Text {
             text: "Main Menu"
-            color: "#FFFFFF" 
+            color: "black"
             font.family: productSansBold.name
-            font.pixelSize: 18
+            font.pixelSize: 24
             font.bold: true
             anchors.centerIn: parent
         }
 
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
-            
             hoverEnabled: true
-            onEntered: menuButton.color = "#262626"
-            onExited: menuButton.color = "#161616"
 
             onClicked: {
                 boardModel.stopGame();
