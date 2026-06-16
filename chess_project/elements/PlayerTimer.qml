@@ -16,11 +16,6 @@ Rectangle {
         timerContainer.rotationAngle += 90;
     }
 
-    //Component.onCompleted: {
-        // Force a small delay to ensure the rotation is detected as a "change"
-        //timerContainer.rotationAngle = 0; 
-    //}
-
     FontLoader {
         id: productSansBold
         source: "../assets/product-sans-bold.ttf"
