@@ -1,6 +1,5 @@
 import QtQuick
 
-// We use a basic Item as the foundation
 Item {
     id: root
     implicitWidth: 200
@@ -19,7 +18,6 @@ Item {
         color: "white"
         radius: height / 2
 
-        // A beautiful, smooth press and hover effect
         scale: mouseArea.pressed ? 0.95 : 1.0
         opacity: mouseArea.containsMouse ? 0.8 : 1.0
         
@@ -37,12 +35,11 @@ Item {
         }
     }
 
-    // MouseArea handles all the click and hover logic transparently
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true // This is required to detect the mouse hovering
-        cursorShape: Qt.PointingHandCursor // Changes the mouse to a pointing finger
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         
         onClicked: root.clicked()
     }

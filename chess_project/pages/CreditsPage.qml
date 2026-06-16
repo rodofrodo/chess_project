@@ -51,21 +51,17 @@ Page {
         width: 881
         spacing: 90
 
-        // The Repeater automatically creates a new row for every item in the model
         Repeater {
             model: ListModel {
-                // Here is your actual data!
                 ListElement { role: "Lead"; name: "Bartosz Strączek" }
                 ListElement { role: "Frontend"; name: "Marek Masorz" }
                 ListElement { role: "Backend"; name: "Łukasz Międlar" }
             }
             
-            // The 'delegate' is the blueprint for how ONE row should look
             delegate: Item {
-                width: parent.width // Stretches to the Column's 400px width
+                width: parent.width
                 height: 30
 
-                // Role (Left aligned, Bold)
                 Text {
                     text: model.role 
                     color: "white"
@@ -77,7 +73,6 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
-                // Name/Initials (Right aligned, Regular)
                 Text {
                     text: model.name
                     color: "white"
@@ -97,7 +92,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
 
         onClicked: {
-            creditspage.StackView.view.pop() // Go back to the previous page
+            creditspage.StackView.view.pop()
         }
     }
 }

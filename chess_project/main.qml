@@ -7,16 +7,16 @@ Window {
     height: 720
     visible: true
     title: qsTr("Chess Game")
-    color: "black" // Prevents white flashes during page transitions
-    visibility: Window.FullScreen // Start in full-screen mode
+    color: "black"
+    visibility: Window.FullScreen
 
     Shortcut {
         sequence: "F11"
         onActivated: {
             if (mainWindow.visibility === Window.FullScreen) {
-                mainWindow.showNormal() // Returns to standard windowed mode
+                mainWindow.showNormal()
             } else {
-                mainWindow.showFullScreen() // Expands to cover the whole monitor
+                mainWindow.showFullScreen()
             }
         }
     }
@@ -24,9 +24,7 @@ Window {
     StackView {
         id: stackView
         anchors.fill: parent
-        
-        // This is the first page the app loads
         initialItem: "pages/StartPage.qml" //
-        //initialItem: "pages/GamePage.qml"// For testing purposes, we can start directly on the game page
+        //initialItem: "pages/GamePage.qml"
     }
 }

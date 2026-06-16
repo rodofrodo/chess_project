@@ -10,14 +10,12 @@ Page {
         source: "../assets/product-sans-regular.ttf"
     }
 
-    // Load your exact Figma artwork
     Image {
         anchors.fill: parent
         source: "../assets/startpage_bg.png" 
         fillMode: Image.PreserveAspectCrop
     }
 
-    // Native text (crisp, clean, and dynamic)
     ChessStartText {
         id: chessText
         anchors.horizontalCenter: parent.horizontalCenter
@@ -25,11 +23,10 @@ Page {
         anchors.topMargin: 222
     }
     
-    // Add the subtitle (matching your Figma design)
     Text {
         id: chessSubtitle
         text: "Where every move is a question, and\nevery mistake becomes history."
-        color: "#a0a0a0" // A nice subtle grey
+        color: "#a0a0a0"
         font.family: productSansRegular.name
 
         font.pixelSize: 24
@@ -39,7 +36,6 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    // Interactive button
     GetStartedBtn {
         anchors.top: chessSubtitle.bottom
         anchors.topMargin: 210

@@ -2,15 +2,16 @@
 #include "Pieces.h"
 #include <cmath>
 
+// ustawia plansze
 ChessGame::ChessGame() {
     setupBoard();
     gameState = GameState::WaitingForStart;
 }
-
+// zwraca historie ruchów
 const std::vector<MoveRecord>& ChessGame::getMoveHistory() const {
     return moveHistory;
 }
-
+// pobiera zbite figury
 const std::vector<PieceType>& ChessGame::getWhiteCapturedPieces() const {
     return whiteCapturedPieces;
 }
@@ -18,21 +19,21 @@ const std::vector<PieceType>& ChessGame::getWhiteCapturedPieces() const {
 const std::vector<PieceType>& ChessGame::getBlackCapturedPieces() const {
     return blackCapturedPieces;
 }
-
+// zwraca figurę stojącą na danym polu
 std::shared_ptr<Piece> ChessGame::getPieceAt(int row, int col) const {
     if (row >= 0 && row < 8 && col >= 0 && col < 8) return board[row][col];
     return nullptr;
 }
-
+// sprawdza czy pole jest zaznaczone
 bool ChessGame::isHighlighted(int row, int col) const {
     for (const auto& m : highlightedMoves) if (m.row == row && m.col == col) return true;
     return false;
 }
-
+// zwraca obecny stan gry
 GameState ChessGame::getGameState() const {
     return gameState;
 }
-
+// resetuje wszystko i puszcza nowy zegar
 void ChessGame::startGame(int totalMinutes, int incrementSeconds) {
     setupBoard();
     currentTurn = Color::White;
@@ -47,7 +48,7 @@ void ChessGame::startGame(int totalMinutes, int incrementSeconds) {
     gameState = GameState::Active;
     clock.start(totalMinutes, incrementSeconds);
 }
-
+// aktualizuje czas gracza (jeśli się skończył to ustwaia taki stan)
 void ChessGame::updateClock() {
     if (gameState != GameState::Active) return;
     clock.tick();
@@ -61,7 +62,7 @@ void ChessGame::updateClock() {
 const ChessClock& ChessGame::getClock() const {
     return clock;
 }
-
+// ustawia figury na początkowych pozycjach
 void ChessGame::setupBoard() {
     board.assign(8, std::vector<std::shared_ptr<Piece>>(8, nullptr));
     auto setupRow = [&](int row, Color color) {
@@ -83,7 +84,7 @@ void ChessGame::setupBoard() {
         board[6][i] = std::make_shared<Pawn>(Color::White, Position{ 6, i });
     }
 }
-
+// sprawdza czy wrogie figury mogą atakować podane pole
 bool ChessGame::isSquareAttacked(Position pos, Color attackerColor) const {
     for (int r = 0; r < 8; ++r) {
         for (int c = 0; c < 8; ++c) {
@@ -101,7 +102,7 @@ bool ChessGame::isSquareAttacked(Position pos, Color attackerColor) const {
     }
     return false;
 }
-
+// sprawdza czy dany król jest atakowany
 bool ChessGame::isCheck(Color kingColor) const {
     Position kingPos{ -1, -1 };
     for (int r = 0; r < 8; ++r) {
@@ -114,7 +115,7 @@ bool ChessGame::isCheck(Color kingColor) const {
     }
     return isSquareAttacked(kingPos, (kingColor == Color::White) ? Color::Black : Color::White);
 }
-
+// sprawdza możliwe ruchy
 std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
     auto rawMoves = piece->getValidMoves(board);
     std::vector<Position> legalMoves;
@@ -122,6 +123,7 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
     int r = piece->getPosition().row;
     int c = piece->getPosition().col;
 
+    // sprawdzamy, czy pionek może bić w przelocie
     if (piece->getType() == PieceType::Pawn && enPassantTarget.row != -1) {
         int dir = piece->getColor() == Color::White ? -1 : 1;
         if (r == enPassantTarget.row - dir && std::abs(c - enPassantTarget.col) == 1) {
@@ -129,6 +131,7 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
         }
     }
 
+    // sprawdzamy czy jest możliwa roszada
     if (piece->getType() == PieceType::King && !piece->getHasMoved() && !isCheck(piece->getColor())) {
         if (!board[r][5] && !board[r][6]) {
             auto rook = board[r][7];
@@ -144,6 +147,7 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
         }
     }
 
+    // sprawdzamy czy wykonany ruch nie zagraża naszemu królowi
     for (auto move : rawMoves) {
         auto destPiece = board[move.row][move.col];
         std::shared_ptr<Piece> epPiece = nullptr;
@@ -165,10 +169,10 @@ std::vector<Position> ChessGame::getLegalMoves(std::shared_ptr<Piece> piece) {
     }
     return legalMoves;
 }
-
+// odpowiada za wybór pola
 void ChessGame::selectSquare(int row, int col) {
     if (gameState != GameState::Active && gameState != GameState::Promotion) return;
-
+    //sprawdzamy czy jest tam figura
     if (selectedRow == -1 && selectedCol == -1) {
         if (board[row][col] && board[row][col]->getColor() == currentTurn) {
             selectedRow = row; selectedCol = col;
@@ -194,6 +198,8 @@ void ChessGame::selectSquare(int row, int col) {
                     capturedPiece = board[selectedRow][col];
                 }
             }
+            
+            // odkładamy zbite pionki do historii
             if (capturedPiece) {
                 if (movingColor == Color::White) {
                     whiteCapturedPieces.push_back(capturedPiece->getType());
@@ -215,21 +221,17 @@ void ChessGame::selectSquare(int row, int col) {
                 updateGameState();
             }
 
-            // ==========================================
-            // --- ADD THIS CHECK/MATE MODIFIER BLOCK ---
-            // ==========================================
+            // dopisujemy plusa lub krzyżyk jeśli ruch skończył się szachem lub matem
             if (!moveHistory.empty()) {
                 std::string modifier = "";
                 if (gameState == GameState::WhiteWins || gameState == GameState::BlackWins) {
-                    modifier = "#"; // Checkmate
+                    modifier = "#"; 
                 }
                 else if (isCheck(currentTurn)) {
-                    modifier = "+"; // Check
+                    modifier = "+"; 
                 }
 
                 if (!modifier.empty()) {
-                    // currentTurn was already swapped above, so if it is Black's turn now, 
-                    // it means White just made the move!
                     if (currentTurn == Color::Black) {
                         moveHistory.back().whiteMove += modifier;
                     }
@@ -238,7 +240,6 @@ void ChessGame::selectSquare(int row, int col) {
                     }
                 }
             }
-            // ==========================================
         }
 
         selectedRow = -1; selectedCol = -1;
@@ -250,19 +251,19 @@ void ChessGame::selectSquare(int row, int col) {
         }
     }
 }
-
+// odpowiada za wykonanie ruchu
 void ChessGame::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     auto piece = board[fromRow][fromCol];
     bool isPawn = (piece->getType() == PieceType::Pawn);
     bool isKing = (piece->getType() == PieceType::King);
-
+    // bicie w przelocie
     if (isPawn && toRow == enPassantTarget.row && toCol == enPassantTarget.col) {
         board[fromRow][toCol] = nullptr;
     }
 
     if (isPawn && std::abs(fromRow - toRow) == 2) enPassantTarget = { (fromRow + toRow) / 2, fromCol };
     else enPassantTarget = { -1, -1 };
-
+	// roszada
     if (isKing && std::abs(fromCol - toCol) == 2) {
         if (toCol == 6) {
             board[fromRow][5] = board[fromRow][7];
@@ -280,13 +281,13 @@ void ChessGame::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     piece->markAsMoved();
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = nullptr;
-
+    // sprawdzenie awansu
     if (isPawn && (toRow == 0 || toRow == 7)) {
         gameState = GameState::Promotion;
         pendingPromotion = { toRow, toCol };
     }
 }
-
+// wykonuje awans pionka
 void ChessGame::promotePawn(PieceType type) {
     if (gameState != GameState::Promotion) return;
 
@@ -317,21 +318,16 @@ void ChessGame::promotePawn(PieceType type) {
     clock.switchTurn();
     updateGameState();
 
-    // ==========================================
-    // --- ADD THIS CHECK/MATE MODIFIER BLOCK ---
-    // ==========================================
     if (!moveHistory.empty()) {
         std::string modifier = "";
         if (gameState == GameState::WhiteWins || gameState == GameState::BlackWins) {
-            modifier = "#"; // Checkmate
+            modifier = "#"; 
         }
         else if (isCheck(currentTurn)) {
-            modifier = "+"; // Check
+            modifier = "+"; 
         }
 
         if (!modifier.empty()) {
-            // currentTurn was already swapped above, so if it is Black's turn now, 
-            // it means White just made the move!
             if (currentTurn == Color::Black) {
                 moveHistory.back().whiteMove += modifier;
             }
@@ -340,9 +336,9 @@ void ChessGame::promotePawn(PieceType type) {
             }
         }
     }
-    // ==========================================
 }
 
+// sprawdzenie możliwego pata lub mata
 void ChessGame::updateGameState() {
     bool hasAnyLegalMove = false;
     for (int r = 0; r < 8; ++r) {
@@ -362,20 +358,17 @@ void ChessGame::updateGameState() {
         else gameState = GameState::Stalemate;
     }
 }
-
-//
+// daje numer pola gdzie stoi zaatakowany król
 int ChessGame::getKingInCheckIndex() const {
-    // 1. Check if White is in check
     if (isCheck(Color::White)) {
         for (int r = 0; r < 8; ++r) {
             for (int c = 0; c < 8; ++c) {
                 if (board[r][c] && board[r][c]->getType() == PieceType::King && board[r][c]->getColor() == Color::White) {
-                    return r * 8 + c; // Convert row/col to 0-63 index
+                    return r * 8 + c; 
                 }
             }
         }
     }
-    // 2. Check if Black is in check
     else if (isCheck(Color::Black)) {
         for (int r = 0; r < 8; ++r) {
             for (int c = 0; c < 8; ++c) {
@@ -385,9 +378,9 @@ int ChessGame::getKingInCheckIndex() const {
             }
         }
     }
-    // 3. Nobody is in check
     return -1;
 }
+// zmiana ruchów na zapis szachowy
 std::string ChessGame::toAlgebraic(std::shared_ptr<Piece> piece, Position from, Position to, bool isCapture, bool isCastling) {
     if (isCastling) {
         if (to.col == 6) return "O-O";

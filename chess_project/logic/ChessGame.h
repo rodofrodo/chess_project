@@ -4,6 +4,7 @@
 #include "Piece.h"
 #include "ChessClock.h"
 
+// klasa odpowiadająca za zasady gry
 class ChessGame {
 public:
     ChessGame();
@@ -19,17 +20,19 @@ public:
     const std::vector<PieceType>& getBlackCapturedPieces() const;
     void updateClock();
     const ChessClock& getClock() const;
-
     int getKingInCheckIndex() const;
 
 private:
     std::vector<std::vector<std::shared_ptr<Piece>>> board;
     int selectedRow = -1;
     int selectedCol = -1;
+    // lista pól, na które może przemieścić się wybrana figura
     std::vector<Position> highlightedMoves;
     Color currentTurn = Color::White;
     GameState gameState = GameState::WaitingForStart;
+    // pole dla bicia w przelocie
     Position enPassantTarget = { -1, -1 };
+    // pozycja pionka czekającego na awans
     Position pendingPromotion = { -1, -1 };
     ChessClock clock;
     std::vector<MoveRecord> moveHistory;

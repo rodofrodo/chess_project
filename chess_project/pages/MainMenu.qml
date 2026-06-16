@@ -52,7 +52,7 @@ Page {
         anchors.topMargin: 857
         anchors.rightMargin: 83
         onClicked: {
-            Qt.quit() // Exit the application
+            Qt.quit()
         }
     }
 }

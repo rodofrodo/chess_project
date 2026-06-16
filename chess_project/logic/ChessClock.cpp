@@ -1,11 +1,11 @@
 #include "ChessClock.h"
 #include <algorithm>
 
-ChessClock::ChessClock()
-    : whiteTimeMs(0), blackTimeMs(0), incrementMs(0), currentTurn(Color::White), isRunning(false) {
+ChessClock::ChessClock() : whiteTimeMs(0), blackTimeMs(0), incrementMs(0), currentTurn(Color::White), isRunning(false) {
 }
 
 void ChessClock::start(int minutes, int incrementSeconds) {
+    // przeliczamy minuty i sekundy na same milisekundy
     long long timeMs = static_cast<long long>(minutes) * 60 * 1000;
     incrementMs = static_cast<long long>(incrementSeconds) * 1000;
     
@@ -15,12 +15,11 @@ void ChessClock::start(int minutes, int incrementSeconds) {
     isRunning = true;
     lastTick = std::chrono::steady_clock::now();
 }
-
+// zmiana tury, zmiana komu leci czas
 void ChessClock::switchTurn() {
     if (!isRunning) return;
 
-    tick(); // Update time before switching
-
+    tick();
     if (currentTurn == Color::White) {
         whiteTimeMs += incrementMs;
         currentTurn = Color::Black;
@@ -39,6 +38,7 @@ void ChessClock::tick() {
     auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTick).count();
     lastTick = now;
 
+    // std::max odpowiada by czas nie spadł poniżej zera, jeśli czas uciekł to zatrzymujemy zegar
     if (currentTurn == Color::White) {
         whiteTimeMs = std::max(0LL, whiteTimeMs - elapsedMs);
         if (whiteTimeMs == 0) isRunning = false;
