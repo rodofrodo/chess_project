@@ -25,6 +25,11 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 220
+
+        onReturnToMenu: {
+            gamepage.StackView.view.pop(); 
+            gamepage.StackView.view.push("GamePage.qml");
+        }
     }
 
     PlayerTimer {
@@ -75,6 +80,7 @@ Page {
 
         MoveHistoryPanel {
             id: historyPanel
+            visible: rightPanelStack.currentIndex == 1
         }
     }
 
@@ -101,42 +107,53 @@ Page {
     }
 
     // RETURN TO MENU BUTTON
-    Rectangle {
-        id: menuButton
-        width: 200
-        height: 50
-
-        anchors.top: restartButton.bottom
-        anchors.topMargin: 10
-        anchors.left: historyPanel.left
-
-        color: "white"
-        radius: height / 2
-
-        scale: mouseArea.pressed ? 0.95 : 1.0
-        opacity: mouseArea.containsMouse ? 0.8 : 1.0
+    Item {
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 45
     
-        Behavior on scale { NumberAnimation { duration: 100 } }
-        Behavior on opacity { NumberAnimation { duration: 150 } }
+        anchors.left: board.right 
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+    
+        height: 50
+        visible: rightPanelStack.currentIndex == 1
 
-        Text {
-            text: "Main Menu"
-            color: "black"
-            font.family: productSansBold.name
-            font.pixelSize: 24
-            font.bold: true
+        Rectangle {
+            id: menuButton
+            width: 200
+            height: 50
+
             anchors.centerIn: parent
-        }
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
+            color: "white"
+            radius: height / 2
 
-            onClicked: {
-                boardModel.stopGame();
-                gamepage.StackView.view.pop();
+            scale: mouseArea.pressed ? 0.95 : 1.0
+            opacity: mouseArea.containsMouse ? 0.8 : 1.0
+    
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+
+            Text {
+                text: "Main Menu"
+                color: "black"
+                font.family: productSansBold.name
+                font.pixelSize: 24
+                font.bold: true
+                anchors.centerIn: parent
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+
+                onClicked: {
+                    boardModel.stopGame();
+                    gamepage.StackView.view.pop();
+                }
             }
         }
     }
