@@ -248,4 +248,86 @@ Rectangle {
             }
         }
     }
+
+    // ==========================================
+    // PAWN PROMOTION OVERLAY
+    // ==========================================
+    Rectangle {
+        id: promotionBlocker
+        anchors.fill: boardGrid
+        color: "#AA000000" // 66% transparent black
+        z: 200 // Sits on top of EVERYTHING
+        visible: boardModel.isPromotionActive
+        
+        // Trap mouse clicks so they can't click the board behind the menu
+        MouseArea { anchors.fill: parent }
+
+        // The White Menu Box (Matching your screenshot!)
+        Rectangle {
+            anchors.centerIn: parent
+            width: 80
+            height: 300 // Tall enough to fit 4 vertical pieces
+            color: "white"
+            radius: 8
+            
+            // A subtle drop shadow so it pops off the dark background
+            border.color: "#333333"
+            border.width: 1
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 10
+
+                // We use an array of objects to map the name to your C++ PieceType Enums
+                Repeater {
+                    model: [
+                        { typeId: 4, name: "queen" },
+                        { typeId: 2, name: "knight" },
+                        { typeId: 1, name: "rook" },
+                        { typeId: 3, name: "bishop" }
+                    ]
+
+                    delegate: Rectangle {
+                        width: 60
+                        height: 60
+                        color: hoverArea.containsMouse ? "#eeeeee" : "transparent"
+                        radius: 5
+
+                        Image {
+                            // 1. Remove the fill anchors and use centerIn so we can resize it
+                            anchors.centerIn: parent
+                        
+                            // 2. THE CUSTOM SCALE LOGIC
+                            // If it's a rook, shrink it to 75%. Otherwise, leave it at 100%.
+                            property real scaleMultiplier: modelData.name === "rook" ? 0.75 : 1.0
+                        
+                            // 3. Apply the scale! 
+                            // We use a base size of 50, which matches your old 'margin: 5' look perfectly.
+                            width: 50 * scaleMultiplier
+                            height: 50 * scaleMultiplier
+
+                            fillMode: Image.PreserveAspectFit
+                            sourceSize.height: 100
+
+                            // Dynamically grab White or Black SVGs based on whose turn it is
+                            property string pieceColor: boardModel.isWhiteTurn ? "white" : "black"
+                            source: "../assets/pawns/" + modelData.name + "_" + pieceColor + ".svg"
+                        }
+
+                        MouseArea {
+                            id: hoverArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            
+                            onClicked: {
+                                // Tell C++ which piece we picked!
+                                boardModel.promotePawn(modelData.typeId)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
