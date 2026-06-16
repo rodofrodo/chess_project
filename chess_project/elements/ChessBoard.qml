@@ -330,4 +330,113 @@ Rectangle {
             }
         }
     }
+
+    // ==========================================
+    // GAME OVER OVERLAY
+    // ==========================================
+    Rectangle {
+        id: gameOverOverlay
+        anchors.fill: boardGrid // Covers the board perfectly
+        color: "#AA000000" // 66% transparent black background to dim the board
+        z: 300 // Sits on top of EVERYTHING (including promotion menu)
+        
+        // Only visible when the animation triggers it
+        visible: opacity > 0
+        opacity: 0.0
+        
+        // Trap mouse clicks so players can't move pieces after the game ends
+        MouseArea { anchors.fill: parent }
+
+        // --- THE BRAIN: Figure out the outcome based on C++ text ---
+        property string outcome: boardModel.gameStateText
+        property bool isWhiteWin: outcome.includes("White Wins") || outcome.includes("White won")
+        property bool isBlackWin: outcome.includes("Black Wins") || outcome.includes("Black won")
+        property bool isDraw: outcome.includes("Stalemate")
+
+        // The Main Popup Box
+        Rectangle {
+            id: gameOverBox
+            anchors.centerIn: parent
+            width: 320
+            height: 180
+            radius: 12
+            
+            // Match your screenshots exactly!
+            color: {
+                if (gameOverOverlay.isWhiteWin) return "#FFFFFF";
+                if (gameOverOverlay.isBlackWin) return "#000000";
+                if (gameOverOverlay.isDraw) return "#FFB300"; // The Golden Orange
+                return "transparent";
+            }
+            
+            // Subtle border to help the black/white boxes pop against the dark background
+            border.color: gameOverOverlay.isWhiteWin ? "#E0E0E0" : "#222222"
+            border.width: 1
+            
+            // Starts shrunk down for the animation
+            scale: 0.5 
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 15
+
+                // 1. The Title (White Won, Black Won, Stalemate)
+                Text {
+                    text: {
+                        if (gameOverOverlay.isWhiteWin) return "White Won";
+                        if (gameOverOverlay.isBlackWin) return "Black Won";
+                        return "Stalemate";
+                    }
+                    color: gameOverOverlay.isBlackWin ? "white" : "black"
+                    font.family: "Arial" // Replace with productSansBold.name if available
+                    font.pixelSize: 32
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // 2. The Score (1-0, 0-1, 1/2-1/2)
+                Text {
+                    text: {
+                        if (gameOverOverlay.isWhiteWin) return "1 - 0";
+                        if (gameOverOverlay.isBlackWin) return "0 - 1";
+                        return "1/2 - 1/2";
+                    }
+                    color: gameOverOverlay.isBlackWin ? "white" : "black"
+                    font.family: "Arial" // productSansBold.name
+                    font.pixelSize: 28
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                
+                // 3. Optional: The specific reason from C++ (e.g. "Checkmate" or "on time")
+                Text {
+                    text: gameOverOverlay.outcome
+                    color: gameOverOverlay.isBlackWin ? "#AAAAAA" : "#666666"
+                    font.family: "Arial"
+                    font.pixelSize: 14
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
+
+        // ==========================================
+        // THE ANIMATION
+        // ==========================================
+        ParallelAnimation {
+            id: gameOverAnim
+            // Fade in the dark background
+            NumberAnimation { target: gameOverOverlay; property: "opacity"; to: 1.0; duration: 400 }
+            // "Punch" the box outwards to full size with a rubber-band bounce
+            NumberAnimation { target: gameOverBox; property: "scale"; to: 1.0; duration: 500; easing.type: Easing.OutBack }
+        }
+
+        // Trigger the animation automatically when C++ says the game is over
+        onOutcomeChanged: {
+            if (outcome !== "") {
+                gameOverAnim.restart();
+            } else {
+                // If the user clicks "New Game" and C++ resets the string, hide the box instantly
+                opacity = 0.0;
+                gameOverBox.scale = 0.5;
+            }
+        }
+    }
 }
