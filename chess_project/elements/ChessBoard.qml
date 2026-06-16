@@ -293,8 +293,8 @@ Rectangle {
                     model: [
                         { typeId: 4, name: "queen" },
                         { typeId: 2, name: "knight" },
-                        { typeId: 1, name: "rook" },
-                        { typeId: 3, name: "bishop" }
+                        { typeId: 3, name: "bishop" },
+                        { typeId: 1, name: "rook" }
                     ]
 
                     delegate: Rectangle {
