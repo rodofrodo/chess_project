@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Piece.h"
+#include "ChessClock.h"
 
 class ChessGame {
 public:
@@ -10,7 +11,16 @@ public:
     bool isHighlighted(int row, int col) const;
     void selectSquare(int row, int col);
     GameState getGameState() const;
+    Color getCurrentTurn() const { return currentTurn; }
     void promotePawn(PieceType type);
+    void startGame(int totalMinutes, int incrementSeconds);
+    const std::vector<MoveRecord>& getMoveHistory() const;
+    const std::vector<PieceType>& getWhiteCapturedPieces() const;
+    const std::vector<PieceType>& getBlackCapturedPieces() const;
+    void updateClock();
+    const ChessClock& getClock() const;
+
+    int getKingInCheckIndex() const;
 
 private:
     std::vector<std::vector<std::shared_ptr<Piece>>> board;
@@ -18,11 +28,16 @@ private:
     int selectedCol = -1;
     std::vector<Position> highlightedMoves;
     Color currentTurn = Color::White;
-    GameState gameState = GameState::Active;
+    GameState gameState = GameState::WaitingForStart;
     Position enPassantTarget = { -1, -1 };
     Position pendingPromotion = { -1, -1 };
+    ChessClock clock;
+    std::vector<MoveRecord> moveHistory;
+    std::vector<PieceType> whiteCapturedPieces;
+    std::vector<PieceType> blackCapturedPieces;
 
     void setupBoard();
+    std::string toAlgebraic(std::shared_ptr<Piece> piece, Position from, Position to, bool isCapture, bool isCastling);
     bool isCheck(Color kingColor) const;
     bool isSquareAttacked(Position pos, Color attackerColor) const;
     void updateGameState();

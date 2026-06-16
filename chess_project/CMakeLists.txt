@@ -14,7 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR}
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
 
 qt_standard_project_setup()
-
+#
 set(PROJECT_SOURCES
     main.cpp
     logic/Piece.h
@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
     logic/Pieces.h
     logic/ChessGame.cpp
     logic/ChessGame.h
+    logic/ChessClock.cpp
+    logic/ChessClock.h
     connection/ChessBoardQmlModel.cpp
     connection/ChessBoardQmlModel.h
 )

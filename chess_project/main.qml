@@ -26,7 +26,7 @@ Window {
         anchors.fill: parent
         
         // This is the first page the app loads
-        //initialItem: "pages/StartPage.qml" 
-        initialItem: "pages/GamePage.qml"// For testing purposes, we can start directly on the game page
+        initialItem: "pages/StartPage.qml" //
+        //initialItem: "pages/GamePage.qml"// For testing purposes, we can start directly on the game page
     }
 }

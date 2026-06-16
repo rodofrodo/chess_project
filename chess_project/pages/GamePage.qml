@@ -36,7 +36,7 @@ Page {
         anchors.topMargin: 65
 
         isDark: true
-        timeText: "0:00"
+        timeText: boardModel.blackTimeText
         rotationAngle: 180
     }
 
@@ -49,7 +49,7 @@ Page {
         anchors.bottomMargin: 65
 
         isDark: false
-        timeText: "0:00"
+        timeText: boardModel.whiteTimeText
         rotationAngle: 180
     }
 
@@ -76,7 +76,7 @@ Page {
                 console.log("Starting a game of type: " + category + " with time: " + timeControl);
             
                 // 1. Tell the C++ backend to configure the game timers based on the selection
-                // gameModel.setTimeControl(timeControl); 
+                boardModel.startGame(timeControl); 
             
                 // 2. Flip the UI to the actual game history panel
                 rightPanelStack.currentIndex = 1; 
@@ -85,6 +85,7 @@ Page {
 
         // CARD 1: The Active Game History
         MoveHistoryPanel {
+            id: historyPanel
             // No anchors needed here either!
         }
     }
@@ -98,8 +99,7 @@ Page {
         anchors.topMargin: 15
         pieceColor: "white"
         
-        // Mock data to test the layout
-        capturedList: ["rook", "knight", "bishop", "pawn", "pawn", "pawn"]
+        capturedList: boardModel.blackCapturedList
     }
 
     // BOTTOM CAPTURED PIECES (Black pieces captured by the bottom player)
@@ -112,7 +112,86 @@ Page {
         anchors.bottomMargin: 15
         pieceColor: "black"
         
-        // Mock data to test the layout
-        capturedList: ["queen", "pawn", "pawn"]
+        capturedList: boardModel.whiteCapturedList
     }
+
+    // ABORT / RESTART BUTTON
+    /*
+    Rectangle {
+        id: restartButton
+        width: historyPanel.width
+        height: 50
+        radius: 15
+        color: "#161616" // Matches your dark history panel background
+        
+        // Anchor it right below your history panel!
+        anchors.top: historyPanel.bottom
+        anchors.topMargin: 15
+        anchors.left: historyPanel.left
+
+        Text {
+            text: "Restart Game"
+            color: "#FF5555" // A nice warning red
+            font.family: productSansBold.name
+            font.pixelSize: 18
+            font.bold: true
+            anchors.centerIn: parent
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            
+            hoverEnabled: true
+            onEntered: restartButton.color = "#262626"
+            onExited: restartButton.color = "#161616"
+
+            onClicked: {
+                // Wipes the board and starts fresh instantly
+                boardModel.startGame("10|0");
+            }
+        }
+    }
+
+    // RETURN TO MENU BUTTON
+    Rectangle {
+        id: menuButton
+        width: historyPanel.width
+        height: 50
+        radius: 15
+        color: "#161616" 
+        
+        // Example: Anchoring it right below the restart button
+        anchors.top: restartButton.bottom
+        anchors.topMargin: 10
+        anchors.left: historyPanel.left
+
+        Text {
+            text: "Main Menu"
+            color: "#FFFFFF" 
+            font.family: productSansBold.name // Or "Arial"
+            font.pixelSize: 18
+            font.bold: true
+            anchors.centerIn: parent
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            
+            hoverEnabled: true
+            onEntered: menuButton.color = "#262626"
+            onExited: menuButton.color = "#161616"
+
+            onClicked: {
+                // 1. Tell C++ to kill the game and timers immediately
+                boardModel.stopGame();
+                
+                // 2. Tell the StackView to destroy this GamePage and go back!
+                // (Assuming your StackView id is 'stackView' or similar)
+                // If your StackView doesn't have an ID, you can use 'StackView.view'
+                gamepage.StackView.view.pop();
+            }
+        }
+    }*/
 }

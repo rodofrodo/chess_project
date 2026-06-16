@@ -8,11 +8,23 @@ Rectangle {
     color: "white" 
     radius: 25
 
+    property int kingInCheckIndex: boardModel.kingInCheckIndex
+
     function getPieceName(type, color) {
         if (type === -1) return "";
         var types = ["pawn", "rook", "knight", "bishop", "queen", "king"];
         var colors = ["white", "black"];
         return types[type] + "_" + colors[color];
+    }
+
+    FontLoader {
+        id: productSansBold
+        source: "../assets/product-sans-bold.ttf"
+    }
+
+    FontLoader {
+        id: productSansRegular
+        source: "../assets/product-sans-regular.ttf"
     }
 
     Rectangle {
@@ -64,6 +76,16 @@ Rectangle {
                 }
 
                 z: clickArea.drag.active ? 1 : 0 // Ensure the dragged piece is always on top
+
+                // ==========================================
+                // --- ADD THIS RED CHECK OVERLAY HERE ---
+                // ==========================================
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#900000" 
+                    // Only visible if this exact square is the one in check!
+                    visible: index === root.kingInCheckIndex 
+                }
 
                 // --- ADD THE PIECE IMAGE HERE ---
                 Image {
@@ -233,6 +255,233 @@ Rectangle {
                     color: "black"
                     anchors.centerIn: parent
                 }
+            }
+        }
+    }
+
+    // ==========================================
+    // PAWN PROMOTION OVERLAY
+    // ==========================================
+    Rectangle {
+        id: promotionBlocker
+        anchors.fill: boardGrid
+        color: "#AA000000" // 66% transparent black
+        z: 200 // Sits on top of EVERYTHING
+        visible: boardModel.isPromotionActive
+        
+        // Trap mouse clicks so they can't click the board behind the menu
+        MouseArea { anchors.fill: parent }
+
+        // The White Menu Box (Matching your screenshot!)
+        Rectangle {
+            anchors.centerIn: parent
+            width: 80
+            height: 300 // Tall enough to fit 4 vertical pieces
+            color: "white"
+            radius: 8
+            
+            // A subtle drop shadow so it pops off the dark background
+            border.color: "#333333"
+            border.width: 1
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 10
+
+                // We use an array of objects to map the name to your C++ PieceType Enums
+                Repeater {
+                    model: [
+                        { typeId: 4, name: "queen" },
+                        { typeId: 2, name: "knight" },
+                        { typeId: 3, name: "bishop" },
+                        { typeId: 1, name: "rook" }
+                    ]
+
+                    delegate: Rectangle {
+                        width: 60
+                        height: 60
+                        color: hoverArea.containsMouse ? "#eeeeee" : "transparent"
+                        radius: 5
+
+                        Image {
+                            // 1. Remove the fill anchors and use centerIn so we can resize it
+                            anchors.centerIn: parent
+                        
+                            // 2. THE CUSTOM SCALE LOGIC
+                            // If it's a rook, shrink it to 75%. Otherwise, leave it at 100%.
+                            property real scaleMultiplier: modelData.name === "rook" ? 0.75 : 1.0
+                        
+                            // 3. Apply the scale! 
+                            // We use a base size of 50, which matches your old 'margin: 5' look perfectly.
+                            width: 50 * scaleMultiplier
+                            height: 50 * scaleMultiplier
+
+                            fillMode: Image.PreserveAspectFit
+                            sourceSize.height: 100
+
+                            // Dynamically grab White or Black SVGs based on whose turn it is
+                            property string pieceColor: boardModel.isWhiteTurn ? "white" : "black"
+                            source: "../assets/pawns/" + modelData.name + "_" + pieceColor + ".svg"
+                        }
+
+                        MouseArea {
+                            id: hoverArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            
+                            onClicked: {
+                                // Tell C++ which piece we picked!
+                                boardModel.promotePawn(modelData.typeId)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ==========================================
+    // GAME OVER OVERLAY
+    // ==========================================
+    Rectangle {
+        id: gameOverOverlay
+        anchors.fill: boardGrid // Covers the board perfectly
+        color: "#AA000000" // 66% transparent black background to dim the board
+        z: 300 // Sits on top of EVERYTHING (including promotion menu)
+        
+        // Only visible when the animation triggers it
+        visible: opacity > 0
+        opacity: 0.0
+        
+        // Trap mouse clicks so players can't move pieces after the game ends
+        MouseArea { anchors.fill: parent }
+
+        // --- THE BRAIN: Figure out the outcome based on C++ text ---
+        property string outcome: boardModel.gameStateText
+        property bool isWhiteWin: outcome.includes("White Wins") || outcome.includes("White won")
+        property bool isBlackWin: outcome.includes("Black Wins") || outcome.includes("Black won")
+        property bool isDraw: outcome.includes("Stalemate")
+
+        // The Main Popup Box
+        Rectangle {
+            id: gameOverBox
+            anchors.centerIn: parent
+            width: 320
+            height: 180
+            radius: 12
+            
+            // Match your screenshots exactly!
+            color: {
+                if (gameOverOverlay.isWhiteWin) return "#FFFFFF";
+                if (gameOverOverlay.isBlackWin) return "#000000";
+                if (gameOverOverlay.isDraw) return "#FFB300"; // The Golden Orange
+                return "transparent";
+            }
+            
+            // Subtle border to help the black/white boxes pop against the dark background
+            border.color: gameOverOverlay.isWhiteWin ? "#E0E0E0" : "#222222"
+            border.width: 1
+            
+            // Starts shrunk down for the animation
+            scale: 0.5 
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 15
+
+                // 1. The Title (White Won, Black Won, Stalemate)
+                Text {
+                    text: {
+                        if (gameOverOverlay.isWhiteWin) return "White Won";
+                        if (gameOverOverlay.isBlackWin) return "Black Won";
+                        return "Stalemate";
+                    }
+                    color: gameOverOverlay.isBlackWin ? "white" : "black"
+                    font.family: productSansBold.name // Replace with productSansBold.name if available
+                    font.pixelSize: 32
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // 2. The Score (1-0, 0-1, 1/2-1/2)
+                Text {
+                    text: {
+                        if (gameOverOverlay.isWhiteWin) return "1 - 0";
+                        if (gameOverOverlay.isBlackWin) return "0 - 1";
+                        return "1/2 - 1/2";
+                    }
+                    color: gameOverOverlay.isBlackWin ? "white" : "black"
+                    font.family: productSansBold.name // productSansBold.name
+                    font.pixelSize: 28
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                
+                // 3. Optional: The specific reason from C++ (e.g. "Checkmate" or "on time")
+                Text {
+                    text: gameOverOverlay.outcome
+                    color: gameOverOverlay.isBlackWin ? "#AAAAAA" : "#666666"
+                    font.family: productSansRegular.name
+                    font.pixelSize: 14
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // 4.
+                /*
+                Rectangle {
+                    width: 160
+                    height: 40
+                    radius: 20
+                    // Match the theme of the winner's box
+                    color: gameOverOverlay.isBlackWin ? "#333333" : "#F0F0F0"
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        text: "Play Again"
+                        font.family: productSansBold.name // productSansBold.name
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: gameOverOverlay.isBlackWin ? "white" : "black"
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        
+                        // Subtle hover effect
+                        hoverEnabled: true
+                        onEntered: parent.opacity = 0.8
+                        onExited: parent.opacity = 1.0
+
+                        onClicked: {
+                            // Instantly resets the entire game! 
+                            // (Change "10|0" to whatever time control they are currently playing)
+                            boardModel.startGame("10|0");
+                        }
+                    }
+                }*/
+            }
+        }
+
+        // ==========================================
+        // THE ANIMATION
+        // ==========================================
+        ParallelAnimation {
+            id: gameOverAnim
+            // Fade in the dark background
+            NumberAnimation { target: gameOverOverlay; property: "opacity"; to: 1.0; duration: 400 }
+            // "Punch" the box outwards to full size with a rubber-band bounce
+            NumberAnimation { target: gameOverBox; property: "scale"; to: 1.0; duration: 500; easing.type: Easing.OutBack }
+        }
+
+        // Trigger the animation automatically when C++ says the game is over
+        onOutcomeChanged: {
+            if (outcome !== "") {
+                gameOverAnim.restart();
+            } else {
+                // If the user clicks "New Game" and C++ resets the string, hide the box instantly
+                opacity = 0.0;
+                gameOverBox.scale = 0.5;
             }
         }
     }
