@@ -1,4 +1,4 @@
-
+<img width="7680" height="4320" alt="chess_project_github" src="https://github.com/user-attachments/assets/f2d653f8-5232-4c95-be85-adce011a3229" />
 
 [![C++](https://img.shields.io/badge/C++-%2300599C.svg?logo=c%2B%2B&logoColor=white)](#)
 [![Qt](https://img.shields.io/badge/Qt-2CDE85?logo=Qt&logoColor=fff)](#)
