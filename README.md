@@ -2,6 +2,14 @@
 
 A modern, highly polished local multiplayer Chess application featuring a robust **C++ engine backend** and a sleek, animated **QML frontend**.
 
+## 👥 Authors
+
+| Name | Role | GitHub |
+| :--- | :--- | :--- |
+| **Bartosz Strączek** | Lead Developer (UI/UX & Frontend Architecture) | [@rodofrodo](https://github.com/rodofrodo) |
+| **Łukasz Międlar** | Backend Developer (C++ Core Engine & Game Logic) | [@Lucasso00](https://github.com/Lucasso00) |
+| **Marek Masorz** | Integration Engineer (C++ to QML Bridge) | [@M3rrQu](https://github.com/M3rrQu) |
+
 ## ✨ Features
 - **Complete Chess Logic**: Full support for standard rules, including check, checkmate, stalemate, castling, en passant, and pawn promotion.
 - **Modern UI/UX**: A responsive, beautifully designed interface utilizing `QtQuick` and `QtQuick.Controls`.
