@@ -36,7 +36,21 @@ A modern, highly polished local multiplayer Chess application featuring a robust
 - **Seamless Navigation**: Uses QML `StackView` architecture for memory-efficient navigation between the Main Menu and the Game Board.
 
 ## 📸 Screenshots
-_there will be screenshots_
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/59f6abff-0a5f-4d68-acb2-92f71a2cc922" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/4d8b1cec-4e33-495a-864f-060d6c0f01ca" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/fb549204-1d26-4324-9c35-1b9aafb494c8" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/26890e3a-05cb-432b-bb5a-b764af4ce0b9" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/3848db5d-70df-4c26-ae24-7941f8b2c44c" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/cd8b90b2-7fb1-41aa-ad88-b72593533bc5" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/2d6128b6-a85f-4d2c-b459-569f6018a646" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/197a85ad-d40a-449a-8ece-c75bd8a14221" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/45de7f53-67a8-4e5e-9d51-f7eb2891ac23" />
+<img width="1918" height="1079" alt="image" src="https://github.com/user-attachments/assets/10dfe6ac-2e7a-4593-a483-8f29caf9904b" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/e31fbfbf-bb90-40c4-93ab-4d3aa1d469db" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/d30f1fa9-77f8-48ce-9e3b-d4f781cae7a9" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/e33821e9-bf14-49ef-9120-944b43f35d68" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/07084c39-3c38-4ad3-b8e1-5c81090fc45c" />
+
 
 ## 🏗️ Architecture
 This project strictly adheres to the Model-View architecture, cleanly separating the game logic from the user interface:
