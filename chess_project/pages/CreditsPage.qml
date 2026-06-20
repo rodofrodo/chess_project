@@ -54,7 +54,7 @@ Page {
         Repeater {
             model: ListModel {
                 ListElement { role: "Lead"; name: "Bartosz Strączek" }
-                ListElement { role: "Frontend"; name: "Marek Masorz" }
+                ListElement { role: "Integration"; name: "Marek Masorz" }
                 ListElement { role: "Backend"; name: "Łukasz Międlar" }
             }
             
