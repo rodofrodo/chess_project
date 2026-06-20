@@ -70,6 +70,7 @@ if(QT_VERSION VERSION_GREATER_EQUAL 6.2)
             assets/product-sans-italic.ttf
             assets/product-sans-regular.ttf
             assets/icon.png
+            assets/github-logo.png
             # -- pawns --
             # black
             assets/pawns/bishop_black.svg
