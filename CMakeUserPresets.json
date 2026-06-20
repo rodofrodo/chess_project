@@ -2,6 +2,28 @@
   "version": 3,
   "configurePresets": [
     {
+      "hidden": false,
+      "name": "Qt-Debug",
+      "inherits": "Qt-Default",
+      "binaryDir": "${sourceDir}/out/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS": "-DQT_QML_DEBUG"
+      },
+      "environment": {
+        "QML_DEBUG_ARGS": "-qmljsdebugger=file:{9b1bbec4-c6ce-41aa-82f8-c094482bbf11},block"
+      }
+    },
+    {
+      "hidden": false,
+      "name": "Qt-Release",
+      "inherits": "Qt-Default",
+      "binaryDir": "${sourceDir}/out/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "name": "my_local_qt_build",
       "displayName": "My Local Qt Build",
       "inherits": "Qt",
@@ -17,7 +39,8 @@
         "qt-project.org/Version": {
           "checksum": "sGllaqV0T8j4iyHcDEo3pcUNChw="
         }
-      }
+      },
+      "hidden": true
     },
     {
       "hidden": true,
