@@ -6,6 +6,10 @@ Item {
     implicitWidth: 477
     implicitHeight: 78
 
+    /*
+        universal cyperpunk-like button with hover effect and click signal,
+        so that's why there's this property lmfao
+    */
     property string text: "BUTTON"
     signal clicked()
 
@@ -14,7 +18,7 @@ Item {
         source: "../assets/product-sans-bold.ttf"
     }
 
-    Shape {
+    Shape { // pink shape
         id: hoverBg
         anchors.fill: parent
         opacity: mouseArea.containsMouse ? 1.0 : 0.0 
@@ -32,6 +36,7 @@ Item {
         }
     }
 
+    // two texts for the hover effect, one is cyan and the other is white/black depending on hover state
     Text {
         text: root.text
         color: "#00ffff"

@@ -15,12 +15,14 @@ Page {
         source: "../assets/product-sans-regular.ttf"
     }
 
+    // background
     Image {
         anchors.fill: parent
         source: "../assets/creditspage_bg.png" 
         fillMode: Image.PreserveAspectCrop
     }
 
+    // smaller custom text
     ChessStartText {
         fontSize: 64
         anchors.left: parent.left
@@ -52,6 +54,10 @@ Page {
         spacing: 90
 
         Repeater {
+            /*
+                so I was wondering what roles would suit the team members best, and I came up with these.
+                I led the project, Marek was responsible for integration, and Łukasz handled the backend.
+            */
             model: ListModel {
                 ListElement { role: "Lead"; name: "Bartosz Strączek" }
                 ListElement { role: "Integration"; name: "Marek Masorz" }
@@ -62,7 +68,7 @@ Page {
                 width: parent.width
                 height: 30
 
-                Text {
+                Text { // role
                     text: model.role 
                     color: "white"
                     font.family: productSansBold.name
@@ -73,7 +79,7 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
-                Text {
+                Text { // name
                     text: model.name
                     color: "white"
                     font.family: "Arial"
@@ -86,6 +92,7 @@ Page {
         }
     }
 
+    // github repo button
     Rectangle {
         id: repoLinkButton
         width: 250

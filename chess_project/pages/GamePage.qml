@@ -26,12 +26,13 @@ Page {
         anchors.left: parent.left
         anchors.leftMargin: 220
 
-        onReturnToMenu: {
+        onReturnToMenu: { // custom signal from ChessBoard
             gamepage.StackView.view.pop(); 
             gamepage.StackView.view.push("GamePage.qml");
         }
     }
 
+    // player timer controls
     PlayerTimer {
         id: blackTimer
 
@@ -58,6 +59,10 @@ Page {
         rotationAngle: 180
     }
 
+    /*
+        so I used StackLayout here because I wanted to have a menu on the right side 
+        of the board that can switch between different panels.
+    */
     StackLayout {
         id: rightPanelStack
         currentIndex: 0
@@ -72,7 +77,7 @@ Page {
 
         TimeControlMenu {
             onStartClicked: (category, timeControl) => {
-                console.log("Starting a game of type: " + category + " with time: " + timeControl);
+                console.log("Starting a game of type: " + category + " with time: " + timeControl); // test
                 boardModel.startGame(timeControl); 
                 rightPanelStack.currentIndex = 1; 
             }
@@ -80,7 +85,7 @@ Page {
 
         MoveHistoryPanel {
             id: historyPanel
-            visible: rightPanelStack.currentIndex == 1
+            visible: rightPanelStack.currentIndex == 1 // pretty cool, right?
         }
     }
 
@@ -90,7 +95,7 @@ Page {
         anchors.rightMargin: 20
         anchors.top: blackTimer.bottom
         anchors.topMargin: 15
-        pieceColor: "white"
+        pieceColor: "white" // because there are pieces captured by black, so they are white pieces
         
         capturedList: boardModel.blackCapturedList
     }
@@ -101,7 +106,7 @@ Page {
         anchors.rightMargin: 20
         anchors.bottom: whiteTimer.top
         anchors.bottomMargin: 15
-        pieceColor: "black"
+        pieceColor: "black" // same story here
         
         capturedList: boardModel.whiteCapturedList
     }
@@ -151,7 +156,7 @@ Page {
                 hoverEnabled: true
 
                 onClicked: {
-                    boardModel.stopGame();
+                    boardModel.stopGame(); // stop the game when returning to menu
                     gamepage.StackView.view.pop();
                 }
             }

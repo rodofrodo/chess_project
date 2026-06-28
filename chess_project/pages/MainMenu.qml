@@ -23,6 +23,10 @@ Page {
         anchors.leftMargin: 210
     }
 
+    /*
+        those buttons were meant to look like from a cyperpunk world
+        so I think I did a pretty good job with that
+    */
     MenuButton {
         text: "PLAY"
         anchors.right: parent.right

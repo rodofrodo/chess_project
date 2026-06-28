@@ -11,7 +11,7 @@ Grid {
     
     layoutDirection: Qt.RightToLeft 
 
-    property string pieceColor: "white"
+    property string pieceColor: "white" // default val
     property var capturedList: []
 
    Repeater {
@@ -23,7 +23,7 @@ Grid {
             
             Image {
                 property real scaleMultiplier: {
-                    if (modelData === "rook") return 0.75;
+                    if (modelData === "rook") return 0.75; // yeah the rook is a bit bigger than the other pieces
                     return 1.0;
                 }
                 

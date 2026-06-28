@@ -8,10 +8,13 @@ Rectangle {
     color: "white" 
     radius: 25
 
+    // IMPORTANT: This property is used to determine if the king is in check and which square to highlight. 
+    // It's bound to the boardModel's kingInCheckIndex property.
     property int kingInCheckIndex: boardModel.kingInCheckIndex
 
     signal returnToMenu()
 
+    // I didn't come up with this, it's Marek's idea
     function getPieceName(type, color) {
         if (type === -1) return "";
         var types = ["pawn", "rook", "knight", "bishop", "queen", "king"];
@@ -67,12 +70,14 @@ Rectangle {
                     }
                 }
 
-                z: clickArea.drag.active ? 1 : 0 
+                z: clickArea.drag.active ? 1 : 0 // for dragging
                 Rectangle {
                     anchors.fill: parent
                     color: "#900000" 
                     visible: index === root.kingInCheckIndex 
                 }
+
+                // piece img
                 Image {
                     id: pieceImage    
                     width: implicitWidth
@@ -85,7 +90,7 @@ Rectangle {
                     visible: pieceName !== ""
                 }
 
-                MouseArea {
+                MouseArea { // for dragging and selecting squares
                     id: clickArea
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
@@ -121,6 +126,11 @@ Rectangle {
             }
         }
     }
+
+    /*
+        ROWS and COLUMNS for the letters and numbers around the chessboard
+    */
+
     Row {
         anchors.bottom: boardGrid.top
         anchors.left: boardGrid.left
@@ -144,6 +154,7 @@ Rectangle {
             }
         }
     }
+
     Row {
         anchors.top: boardGrid.bottom
         anchors.left: boardGrid.left
@@ -165,6 +176,7 @@ Rectangle {
             }
         }
     }
+
     Column {
         anchors.right: boardGrid.left
         anchors.top: boardGrid.top
@@ -186,6 +198,7 @@ Rectangle {
             }
         }
     }
+
     Column {
         anchors.left: boardGrid.right
         anchors.top: boardGrid.top
@@ -207,6 +220,8 @@ Rectangle {
             }
         }
     }
+
+    // promotion ui/ux box
     Rectangle {
         id: promotionBlocker
         anchors.fill: boardGrid
@@ -228,6 +243,8 @@ Rectangle {
                 spacing: 10
                 Repeater {
                     model: [
+                        // those IDs are the same as the ones used in the backend for piece types
+                        // so that's why there are a bit strange
                         { typeId: 4, name: "queen" },
                         { typeId: 2, name: "knight" },
                         { typeId: 3, name: "bishop" },
@@ -261,7 +278,9 @@ Rectangle {
                             cursorShape: Qt.PointingHandCursor
                             
                             onClicked: {
-                                boardModel.promotePawn(modelData.typeId)
+                                // changes pawn to whatever piece was clicked 
+                                // (usually queen)
+                                boardModel.promotePawn(modelData.typeId) 
                             }
                         }
                     }
@@ -269,11 +288,13 @@ Rectangle {
             }
         }
     }
+
+    // game over
     Rectangle {
         id: gameOverOverlay
         anchors.fill: boardGrid
         color: "#AA000000"
-        z: 300
+        z: 300 // super top
         visible: opacity > 0
         opacity: 0.0
         MouseArea { anchors.fill: parent }
@@ -302,7 +323,7 @@ Rectangle {
             Column {
                 anchors.centerIn: parent
                 spacing: 15
-                Text {
+                Text { // who won
                     text: {
                         if (gameOverOverlay.isWhiteWin) return "White Won";
                         if (gameOverOverlay.isBlackWin) return "Black Won";
@@ -314,7 +335,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                Text {
+                Text { // for fun, the score of the game
                     text: {
                         if (gameOverOverlay.isWhiteWin) return "1 - 0";
                         if (gameOverOverlay.isBlackWin) return "0 - 1";
@@ -326,7 +347,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 
-                Text {
+                Text { // reason for the game ending (checkmate, stalemate, time)
                     text: gameOverOverlay.outcome
                     color: gameOverOverlay.isBlackWin ? "#AAAAAA" : "#666666"
                     font.family: productSansRegular.name
@@ -334,6 +355,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
+                // play again button
                 Rectangle {
                     width: 160
                     height: 40
@@ -367,6 +389,7 @@ Rectangle {
                 }
             }
         }
+
         ParallelAnimation {
             id: gameOverAnim
             NumberAnimation { target: gameOverOverlay; property: "opacity"; to: 1.0; duration: 400 }

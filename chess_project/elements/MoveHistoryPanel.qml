@@ -13,7 +13,7 @@ Item {
         source: "../assets/product-sans-bold.ttf"
     }
 
-    Rectangle {
+    Rectangle { // white/black moves
         id: turnIndicator
         width: 240
         height: 50
@@ -40,6 +40,7 @@ Item {
 
     }
 
+    // background
     Rectangle {
         id: backgroundBox
         anchors.top: turnIndicator.bottom
@@ -59,7 +60,7 @@ Item {
             clip: true
 
             onCountChanged: {
-                moveList.positionViewAtEnd()
+                moveList.positionViewAtEnd() // automatically scroll to the bottom when a new move is added
             }
 
             model: boardModel.moveHistoryList
@@ -69,6 +70,7 @@ Item {
                 height: 40
                 radius: 8
                 
+                // different row colors for better readability
                 color: index % 2 === 0 ? "#262626" : "#1a1a1a"
 
                 Row {
@@ -77,7 +79,7 @@ Item {
                     anchors.rightMargin: 20
                     spacing: 30
 
-                    Text {
+                    Text { // move number
                         text: (index + 1) + "."
                         color: "#888888"
                         font.family: "Lucida Console"
@@ -86,7 +88,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
-                    Text {
+                    Text { // white move
                         text: modelData.whiteMove
                         color: "#d4d4d4"
                         font.family: productSansBold.name
@@ -95,7 +97,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
-                    Text {
+                    Text { // black move
                         text: modelData.blackMove ? modelData.blackMove : ""
                         color: "#888888"
                         font.family: productSansBold.name

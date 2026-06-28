@@ -16,6 +16,7 @@ Page {
         fillMode: Image.PreserveAspectCrop
     }
 
+    // my custom item
     ChessStartText {
         id: chessText
         anchors.horizontalCenter: parent.horizontalCenter

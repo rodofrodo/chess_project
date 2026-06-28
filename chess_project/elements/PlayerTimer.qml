@@ -33,7 +33,7 @@ Rectangle {
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
 
-        Rectangle {
+        Rectangle { // this is the circle that represents the clock
             anchors.fill: parent
             radius: width / 2
             border.width: 4
@@ -41,7 +41,7 @@ Rectangle {
             color: "transparent"
         }
 
-        Rectangle {
+        Rectangle { // this is the hand of the clock that rotates when the time changes
             id: clockHand
             width: 4
             height: 10
@@ -59,6 +59,7 @@ Rectangle {
         }
     }
 
+    // this is the text that shows the time remaining for the player
     Text {
         text: timerContainer.timeText
         font.family: productSansBold.name

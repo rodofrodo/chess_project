@@ -5,6 +5,7 @@ Item {
     implicitWidth: 200
     implicitHeight: 50
 
+    // lol
     signal clicked()
 
     FontLoader {

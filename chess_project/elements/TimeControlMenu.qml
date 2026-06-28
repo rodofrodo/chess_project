@@ -12,6 +12,7 @@ Item {
     property string selectedCategory: ""
     property int selectedIndex: 0
 
+    // options for each category, formatted as "minutes | increment"
     property var timeData: {
         "CLASSICAL [>60 min]": ["60 | 0", "90 | 30"],
         "RAPID [10-60 min]": ["10 | 0", "15 | 10", "30 | 0"],
@@ -39,6 +40,7 @@ Item {
         width: 500
 
         Text {
+            // same control, different text based on menuState
             text: menuState === 0 ? "Choose a time control" : "Choice: " + selectedCategory.split(" ")[0] 
             color: "white"
             font.family: productSansBold.name
@@ -52,7 +54,7 @@ Item {
             color: "#888888"
             font.family: productSansRegular.name
             font.pixelSize: 18
-            visible: menuState === 1
+            visible: menuState === 1 // visibility based on menuState
             anchors.horizontalCenter: parent.horizontalCenter
 
             MouseArea {
@@ -72,7 +74,7 @@ Item {
             spacing: 15
 
             Repeater {
-                model: menuRoot.currentOptions
+                model: menuRoot.currentOptions // this determines what is displayed based on the menuState
                 
                 delegate: Rectangle {
                     width: parent.width
@@ -109,6 +111,7 @@ Item {
 
         Item { width: 1; height: 20 }
 
+        // Start/Continue button
         Rectangle {
             id: bgRect
             width: 200

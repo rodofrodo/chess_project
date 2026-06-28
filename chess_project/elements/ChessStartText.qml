@@ -13,6 +13,11 @@ Item {
         source: "../assets/product-sans-bold.ttf" 
     }
 
+    /*
+        Beautiful CHESS text full of animations
+    */
+
+    // WHITE
     Text {
         id: mainText
         text: root.text
@@ -24,6 +29,7 @@ Item {
         anchors.centerIn: parent
     }
 
+    // BLUE
     Text {
         id: blueText
         text: root.text
@@ -40,6 +46,9 @@ Item {
             loops: Animation.Infinite
             running: true
             
+            // so pretty much those values are not perfect, but they are good enough to make the text 
+            // look like it is shaking and moving in a beautiful way
+
             PauseAnimation { duration: 500 }
             
             PropertyAction { target: blueText; property: "opacity"; value: 1.0 }
@@ -54,6 +63,7 @@ Item {
         }
     }
 
+    // CYAN
     Text {
         id: cyanText
         text: root.text
@@ -70,6 +80,8 @@ Item {
             loops: Animation.Infinite
             running: true
             
+            // same here
+
             PauseAnimation { duration: 520 }
             
             PropertyAction { target: cyanText; property: "opacity"; value: 1.0 }
@@ -84,6 +96,7 @@ Item {
         }
     }
 
+    // YELLOW
     Text {
         id: yellowText
         text: root.text
@@ -100,6 +113,8 @@ Item {
             loops: Animation.Infinite
             running: true
             
+            // so I just got rid of the minus sign
+
             PauseAnimation { duration: 520 }
             
             PropertyAction { target: yellowText; property: "opacity"; value: 1.0 }
@@ -114,6 +129,7 @@ Item {
         }
     }
 
+    // RED
     Text {
         id: redText
         text: root.text
@@ -130,6 +146,8 @@ Item {
             loops: Animation.Infinite
             running: true
             
+            // and here
+
             PauseAnimation { duration: 500 }
             
             PropertyAction { target: redText; property: "opacity"; value: 1.0 }

@@ -5,6 +5,11 @@ Item {
     implicitWidth: 200
     implicitHeight: 50
 
+    /*
+        this button is exactly the same as GoBackBtn.qml, but something went wrong,
+        so ☆*: .｡. o(≧▽≦)o .｡.:*☆
+    */
+
     signal getStartedClicked()
 
     FontLoader {
