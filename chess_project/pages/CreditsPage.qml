@@ -144,6 +144,8 @@ Page {
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
 
+            // You may check this out, but you won't find anything interesting there, it's just a simple chess game project.
+            // Imagine being on GitHub just to get link to a GitHub repo ヾ(＠⌒ー⌒＠)ノ
             onClicked: {
                 Qt.openUrlExternally("https://github.com/rodofrodo/chess_project")
             }

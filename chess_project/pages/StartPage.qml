@@ -42,6 +42,7 @@ Page {
         anchors.topMargin: 210
         anchors.horizontalCenter: parent.horizontalCenter
 
+        // special event
         onGetStartedClicked: {
             root.StackView.view.push("MainMenu.qml")
         }

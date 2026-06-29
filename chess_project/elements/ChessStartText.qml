@@ -5,7 +5,7 @@ Item {
     implicitWidth: mainText.implicitWidth
     implicitHeight: mainText.implicitHeight
 
-    property string text: "CHESS"
+    property string text: "CHESS" // default val
     property int fontSize: 168
 
     FontLoader {

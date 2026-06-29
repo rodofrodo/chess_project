@@ -73,6 +73,4 @@ Rectangle {
     
         horizontalAlignment: Text.AlignRight
     }
-
-
 }

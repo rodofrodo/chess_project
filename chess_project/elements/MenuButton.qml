@@ -7,7 +7,7 @@ Item {
     implicitHeight: 78
 
     /*
-        universal cyperpunk-like button with hover effect and click signal,
+        universal cyperpunk-like buttons with hover effect and click signal,
         so that's why there's this property lmfao
     */
     property string text: "BUTTON"

@@ -63,7 +63,7 @@ Rectangle {
                 property int col: index % 8
                 property bool isLightSquare: (row + col) % 2 === 0
                 color: {
-                    if (model.isHighlighted) {
+                    if (model.isHighlighted) { // checking if the square is highlighted for a possible move
                         return isLightSquare ? "#0077EE" : "#004E9C" 
                     } else {
                         return isLightSquare ? "#FFFFCD" : "#EC94A3" 

@@ -10,6 +10,7 @@ Page {
         source: "../assets/product-sans-bold.ttf"
     }
 
+    // background
     Image {
         anchors.fill: parent
         source: "../assets/mainmenu_bg.png" 

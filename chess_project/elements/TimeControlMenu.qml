@@ -148,6 +148,7 @@ Item {
                         menuRoot.selectedIndex = 0; 
                     } else {
                         var finalTime = menuRoot.currentOptions[menuRoot.selectedIndex];
+                        // for testing purposes
                         console.log("GAME STARTING! Mode: " + menuRoot.selectedCategory + " | Time: " + finalTime);
                         menuRoot.startClicked(menuRoot.selectedCategory, finalTime);
                     }

@@ -124,6 +124,8 @@ Page {
         height: 50
         visible: rightPanelStack.currentIndex == 1
 
+        // I had to use Item so that Rectangle works properly with anchors,
+        // otherwise it would not be centered in the parent.
         Rectangle {
             id: menuButton
             width: 200

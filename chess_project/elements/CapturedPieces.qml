@@ -31,9 +31,7 @@ Grid {
                 height: parent.height * scaleMultiplier
                 
                 anchors.centerIn: parent 
-                
                 fillMode: Image.PreserveAspectFit
-                
                 sourceSize.height: height
                 sourceSize.width: width
                 

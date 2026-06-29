@@ -36,8 +36,6 @@ Item {
 
             Behavior on color { ColorAnimation { duration: 300 } }
         }
-
-
     }
 
     // background
